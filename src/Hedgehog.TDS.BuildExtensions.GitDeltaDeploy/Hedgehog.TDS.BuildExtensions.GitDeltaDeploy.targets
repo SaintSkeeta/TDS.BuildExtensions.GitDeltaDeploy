@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <UsingTask TaskName="GetTdsNuGetPackageFolder" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
+    <ParameterGroup>
+      <PackagesFolderPath ParameterType="System.String" Required="true" />
+      <TdsNuGetFolder ParameterType="System.String" Output="true" />
+    </ParameterGroup>
+    <Task>
+      <Using Namespace="System" />
+      <Using Namespace="System.IO" />
+      <Using Namespace="System.Text.RegularExpressions" />
+      <Code Type="Fragment" Language="cs">
+        <![CDATA[
+        var hhogTDSNuGetNamePattern = "HedgehogDevelopment.TDS.*" ;
+        var hhogTDSPackageFolders = Directory.EnumerateDirectories(PackagesFolderPath, hhogTDSNuGetNamePattern);
+        foreach(var folder in hhogTDSPackageFolders)
+        {
+            var tasksDllFolder = folder + "/build";
+            var tasksFileExists = File.Exists(tasksDllFolder + "/HedgehogDevelopment.SitecoreProject.Tasks.dll");
+            if (tasksFileExists)
+            {
+                TdsNuGetFolder = tasksDllFolder;
+                return true;
+            }
+        }
+        TdsNuGetFolder = "";
+        ]]>
+      </Code>
+    </Task>
+  </UsingTask>
+  <!-- From https://gist.github.com/thoemmi/3483648 -->
+  <UsingTask TaskName="ExistsInPath" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
+    <ParameterGroup>
+      <FileName ParameterType="System.String" Required="true" />
+      <Exists ParameterType="System.Boolean" Output="true" />
+    </ParameterGroup>
+    <Task>
+      <!--<Reference Include="" />-->
+      <Using Namespace="System" />
+      <Using Namespace="System.IO" />
+      <Using Namespace="System.Text.RegularExpressions" />
+      <Code Type="Fragment" Language="cs"><![CDATA[
+        var values = Environment.GetEnvironmentVariable("PATH");
+        foreach (var path in values.Split(';')) {
+            var fullPath = Path.Combine(path, FileName);
+            if (File.Exists(fullPath)) {
+                Exists = true;
+                return true;
+            }
+        }
+        Exists = false;
+        ]]></Code>
+    </Task>
+  </UsingTask>
+  <Target Name="BeforeSitecoreBuild" Condition="'$(CustomGitDeltaDeploy)' == 'True'">
+    <GetTdsNuGetPackageFolder PackagesFolderPath="$(SolutionDir)/packages/">
+      <Output TaskParameter="TdsNuGetFolder" PropertyName="TdsNuGetPackageDllFolder" />
+    </GetTdsNuGetPackageFolder>
+
+    <Message Condition="$(TdsNuGetPackageDllFolder) == ''"
+             Text="Solution doesn't use the HedgehogDevelopment.TDS NuGet package. You need to manually copy the 'packages/build/Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.dll' to your MSBuild directory (C:\Program Files (x86)\MSBuild\HedgehogDevelopment\SitecoreProject\v9.0).'" />
+    <Message Condition="$(TdsNuGetPackageDllFolder) != ''"
+             Text="Solution uses the HedgehogDevelopment.TDS NuGet package. Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.DLL will load from there." />
+
+    <Copy Condition="Exists('$(TdsNuGetPackageDllFolder)/HedgehogDevelopment.SitecoreProject.Tasks.dll') and !Exists('$(TdsNuGetPackageDllFolder)/Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.dll')"
+          SourceFiles="$(SolutionDir)/packages/Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.1.0.0.0/build/Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.dll"
+          DestinationFolder="$(TdsNuGetPackageDllFolder)/" />
+  </Target>
+  <Target Name="BeforeSitecoreMerge" Condition="'$(CustomGitDeltaDeploy)' == 'True'">
+    <Message Importance="" Text="Discovering changed items files since the last local deployment of this project." />
+    <!-- Check that Git exists in the local PATH variable on the machine -->
+    <ExistsInPath FileName="git.exe">
+      <Output TaskParameter="Exists" PropertyName="GitExists" />
+    </ExistsInPath>
+    <Message  Condition="!$(GitExists)"
+              Importance="High" Text="Warn: Git.exe not found in PATH. We cannot determine cullable items from calls to git.exe." />
+
+    <!-- If not supplied to the build already, retrieve the git commit ID of the last successful deployment of this project (from the LastDeploymentGitCommitId.txt file) and store it in the LastDeploymentGitCommitID property. -->
+    <ReadLinesFromFile Condition="$(LastDeploymentGitCommitID) == '' and Exists('$(MSBuildProjectDirectory)/Report/LastDeploymentGitCommitId.txt')"
+                       File="$(MSBuildProjectDirectory)/Report/LastDeploymentGitCommitId.txt" >
+      <Output TaskParameter="Lines" PropertyName="LastDeploymentGitCommitID" />
+    </ReadLinesFromFile>
+    <Message Condition="'$(LastDeploymentGitCommitID)' != ''" 
+             Importance="normal" 
+             Text="Last Deployment Git Commit ID is :- $(LastDeploymentGitCommitID)" />
+    <Message Condition="'$(LastDeploymentGitCommitID)' == ''"
+             Importance="normal" 
+             Text="Last Deployment Git Commit ID does not exist. This will mean the entire TDS project will be deployed without using the custom git delta deploy feature." />
+
+    <!-- Retrieve the git commit ID of the current git repo and store it in the GitCurrentCommitID property. -->
+    <Exec Condition="$(GitExists) and '$(LastDeploymentGitCommitID)' != ''"
+          Command="git rev-parse HEAD" Outputs="$(GitCurrentCommitID)" WorkingDirectory="$(SolutionDir)" ConsoleToMSBuild="true">
+      <Output TaskParameter="ConsoleOutput" PropertyName="GitCurrentCommitID" />
+    </Exec>
+    <Message Condition="'$(GitCurrentCommitID)' != ''" 
+             Importance="normal" Text="Current Git Commit is:- $(GitCurrentCommitID)" />
+
+    <MakeDir Condition="!Exists('$(MSBuildProjectDirectory)/Report')"
+         Directories="$(MSBuildProjectDirectory)/Report" />
+    
+    <!-- Discover the .item files that have changed in between the current commit that this repo is at and the last deployment of this project -->
+    <Exec Condition="$(GitExists) and '$(LastDeploymentGitCommitID)' != '' and '$(GitCurrentCommitID)' != ''" 
+          Command="git diff -r --name-only --no-commit-id $(GitCurrentCommitID) $(LastDeploymentGitCommitID) &quot;*.item&quot; &gt; $(MSBuildProjectDirectory)/Report/ChangedItemFiles.txt" Outputs="$(MSBuildProjectDirectory)/Report/ChangedItemFiles.txt" WorkingDirectory="$(SolutionDir)" />
+  </Target>
+
+  <!-- Cull down the deployable items by checking if they exist in the ChangedItemFiles.txt file. -->
+  <Target Name="GetCullItemsFromProjectParameters">
+    <PropertyGroup Condition="'$(CustomGitDeltaDeploy)' == 'True'">
+      <CullItemsFromProjectClass>Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.Tasks.Filters.CullItemsFromProjectByExistanceInChangedItemsFile, Hedgehog.TDS.BuildExtensions.GitDeltaDeploy</CullItemsFromProjectClass>
+      <CullItemsFromProjectParameters>$(MSBuildProjectDirectory)\Report\ChangedItemFiles.txt</CullItemsFromProjectParameters>
+    </PropertyGroup>
+    <!-- Duplicate of the original Delta Deploy option, allowing for fallback to this if required. -->
+    <PropertyGroup Condition="'$(CustomGitDeltaDeploy)' != 'True' and '$(IncludeItemsChangedAfter)' != ''">
+      <CullItemsFromProjectClass>HedgehogDevelopment.SitecoreProject.Tasks.Filters.CullItemsFromProjectByUpdateDate, HedgehogDevelopment.SitecoreProject.Tasks</CullItemsFromProjectClass>
+      <CullItemsFromProjectParameters>$(IncludeItemsChangedAfter)</CullItemsFromProjectParameters>
+    </PropertyGroup>
+  </Target>
+
+  <!-- Update the LastDeploymentGitCommitId.txt with the commit ID that the current repo is at -->
+  <Target Name="AfterSitecoreMerge" Condition="'$(CustomGitDeltaDeploy)' == 'True'">
+    <Message Importance="normal" Text="Setting the LastDeploymentGitCommitId.txt value to the latest git commit ID." />
+
+    <Exec Condition="$(GitExists)"
+          Command="git rev-parse HEAD &gt; $(MSBuildProjectDirectory)/Report/LastDeploymentGitCommitId.txt" Outputs="$(MSBuildProjectDirectory)/Report/LastDeploymentGitCommitId.txt" WorkingDirectory="$(SolutionDir)"  />
+  </Target>
+</Project>

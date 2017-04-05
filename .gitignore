@@ -1,33 +1,25 @@
-# Object files
-*.o
-*.ko
-*.obj
-*.elf
+*.suo
+*.user
+*.sln.docstates
+/.vs
 
-# Precompiled Headers
-*.gch
-*.pch
+# Build results
 
-# Libraries
-*.lib
-*.a
-*.la
-*.lo
+[Dd]ebug/
+[Rr]elease/
+x64/
+build/
+[Bb]in/
+[Oo]bj/
+Source/.vs
 
-# Shared objects (inc. Windows DLLs)
-*.dll
-*.so
-*.so.*
-*.dylib
+# Nuget packages
+packages*/
 
-# Executables
-*.exe
-*.out
-*.app
-*.i*86
-*.x86_64
-*.hex
+# Hedgehog Team Development for Sitecore
+*.scproj.user
+IconCache/
+T4RenderCache/
+BuiltFiles_*.txt
 
-# Debug files
-*.dSYM/
-*.su
+
