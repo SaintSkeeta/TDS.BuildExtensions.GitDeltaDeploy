@@ -1,11 +1,7 @@
 ﻿using HedgehogDevelopment.SitecoreCommon.Data.Items;
 using HedgehogDevelopment.SitecoreProject.Tasks.Extensibility;
-using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.Tasks.Filters
 {
@@ -18,12 +14,14 @@ namespace Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.Tasks.Filters
                 return true;
             }
 
-            string[] changedFiles = File.ReadAllLines(parameters);
+            var changedFiles = File.ReadAllLines(parameters);
+
+            var convertedFilePath = filePath.Replace(@"\", @"/");
 
 #if DEBUG
             var folderPath = Path.GetDirectoryName(parameters);
-            StreamWriter sw = new StreamWriter(folderPath + @"\DeltaDeployCompare.txt", true);
-            sw.WriteLine("TDS Item filePath is " + filePath.Replace(@"\", @"/"));
+            var sw = new StreamWriter(folderPath + @"\DeltaDeployCompare.txt", true);
+            sw.WriteLine("TDS Item filePath is " + convertedFilePath);
 
             foreach (var file in changedFiles)
             {
@@ -33,7 +31,18 @@ namespace Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.Tasks.Filters
             sw.WriteLine("----");
             sw.Close();
 #endif
-            return changedFiles.Any(x => x.EndsWith(filePath.Replace(@"\", @"/")));
+            // filePaths formats
+            //   Update package creation: absolute path
+            //     e.g. C:/Projects/TDS.Project/sitecore/content/myitem.item
+            //
+            //   Deployment: relative path 
+            //     e.g. sitecore/content/myitem.item
+
+            // parameters formats (ChangedItemFiless.txt via git diff)
+            //   relative path from repo root, 
+            //     e.g. TDSProjects/TDS.Master/sitecore/content/myitem.item
+
+            return changedFiles.Any(x => convertedFilePath.EndsWith(x)) || changedFiles.Any(x => x.EndsWith(convertedFilePath));
         }
     }
 }
