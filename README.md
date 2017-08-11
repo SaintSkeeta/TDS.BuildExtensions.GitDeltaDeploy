@@ -5,7 +5,7 @@
 # Hedgehog TDS.BuildExtensions.GitDeltaDeploy #
 A custom delta deploy step for TDS deployments using Git.
 
-NuGet package available: Hedgehog.TDS.BuildExtensions.GitDeltaDeploy
+NuGet package available: [Hedgehog.TDS.BuildExtensions.GitDeltaDeploy](https://www.nuget.org/packages/Hedgehog.TDS.BuildExtensions.GitDeltaDeploy)
 
 ## Usage ##
  - Ensure you have git.exe in your PATH environment variable.
