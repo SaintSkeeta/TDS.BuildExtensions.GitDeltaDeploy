@@ -66,7 +66,7 @@
           SourceFiles="$(SolutionDir)/packages/Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.1.0.0.0/build/Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.dll"
           DestinationFolder="$(TdsNuGetPackageDllFolder)/" />
   </Target>
-  <Target Name="BeforeSitecoreMerge" Condition="'$(CustomGitDeltaDeploy)' == 'True'">
+  <Target Name="GitDiff" Condition="'$(CustomGitDeltaDeploy)' == 'True'">
     <Message Importance="" Text="Discovering changed items files since the last local deployment of this project." />
     <!-- Check that Git exists in the local PATH variable on the machine -->
     <ExistsInPath FileName="git.exe">
@@ -105,6 +105,7 @@
 
   <!-- Cull down the deployable items by checking if they exist in the ChangedItemFiles.txt file. -->
   <Target Name="GetCullItemsFromProjectParameters">
+    <CallTarget Targets="GitDiff"/>
     <PropertyGroup Condition="'$(CustomGitDeltaDeploy)' == 'True'">
       <CullItemsFromProjectClass>Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.Tasks.Filters.CullItemsFromProjectByExistanceInChangedItemsFile, Hedgehog.TDS.BuildExtensions.GitDeltaDeploy</CullItemsFromProjectClass>
       <CullItemsFromProjectParameters>$(MSBuildProjectDirectory)\Report\ChangedItemFiles.txt</CullItemsFromProjectParameters>
