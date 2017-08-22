@@ -52,6 +52,7 @@
         ]]></Code>
     </Task>
   </UsingTask>
+  <UsingTask AssemblyFile="Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.dll" TaskName="Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.Tasks.Filters.CullFilesFromProject"/>
   <Target Name="BeforeSitecoreBuild" Condition="'$(CustomGitDeltaDeploy)' == 'True'">
     <GetTdsNuGetPackageFolder PackagesFolderPath="$(SolutionDir)/packages/">
       <Output TaskParameter="TdsNuGetFolder" PropertyName="TdsNuGetPackageDllFolder" />
@@ -100,7 +101,7 @@
     
     <!-- Discover the .item files that have changed in between the current commit that this repo is at and the last deployment of this project -->
     <Exec Condition="$(GitExists) and '$(LastDeploymentGitCommitID)' != '' and '$(GitCurrentCommitID)' != ''" 
-          Command="git diff -r --name-only --no-commit-id $(GitCurrentCommitID) $(LastDeploymentGitCommitID) &quot;*.item&quot; &gt; $(MSBuildProjectDirectory)/Report/ChangedItemFiles.txt" Outputs="$(MSBuildProjectDirectory)/Report/ChangedItemFiles.txt" WorkingDirectory="$(SolutionDir)" />
+          Command="git diff -r --name-only --no-commit-id $(LastDeploymentGitCommitID)..$(GitCurrentCommitID) &quot;*.item&quot; &gt; $(MSBuildProjectDirectory)/Report/ChangedItemFiles.txt" Outputs="$(MSBuildProjectDirectory)/Report/ChangedItemFiles.txt" WorkingDirectory="$(SolutionDir)" />
   </Target>
 
   <!-- Cull down the deployable items by checking if they exist in the ChangedItemFiles.txt file. -->
@@ -123,5 +124,23 @@
 
     <Exec Condition="$(GitExists)"
           Command="git rev-parse HEAD &gt; $(MSBuildProjectDirectory)/Report/LastDeploymentGitCommitId.txt" Outputs="$(MSBuildProjectDirectory)/Report/LastDeploymentGitCommitId.txt" WorkingDirectory="$(SolutionDir)"  />
+  </Target>
+
+  <Target Name="AfterSitecoreBuild" Condition="'$(CustomGitDeltaDeploy)' == 'True' and '$(CullProjectFiles)' == 'True'">
+	  <!-- called to set LastDeploymentGitCommitID variable -->
+    <CallTarget Targets="GitDiff"/>
+	
+	  <!-- list all files -->
+	  <Exec Command="git ls-files --full-name &gt; &quot;$(MSBuildProjectDirectory)/Report/AllFiles.$(MSBuildProjectName).txt&quot;" Outputs="$(MSBuildProjectDirectory)/Report/AllFiles.$(MSBuildProjectName).txt" WorkingDirectory="$(SolutionDir)" />
+	
+	  <!-- list changed files -->
+	  <Exec Command="git diff --name-only $(LastDeploymentGitCommitID)..$(GitCurrentCommitID) &gt; &quot;$(MSBuildProjectDirectory)/Report/DiffFiles.$(MSBuildProjectName).txt&quot;" Outputs="$(MSBuildProjectDirectory)/Report/DiffFiles.$(MSBuildProjectName).txt" WorkingDirectory="$(SolutionDir)" />
+	
+	  <!-- aggregate into single file listing only unchanged files -->
+	  <Exec Command="findstr /vig:&quot;$(MSBuildProjectDirectory)\Report\DiffFiles.$(MSBuildProjectName).txt&quot; &quot;$(MSBuildProjectDirectory)\Report\AllFiles.$(MSBuildProjectName).txt&quot; &gt; &quot;$(MSBuildProjectDirectory)\Report\Unchanged.$(MSBuildProjectName).txt&quot;" Outputs="$(MSBuildProjectDirectory)\Report\Unchanged.$(MSBuildProjectName).txt" WorkingDirectory="$(SolutionDir)" />
+	
+	  <CullFilesFromProject OutputPath="$(_OutputPath)" UnchangedFiles="$(MSBuildProjectDirectory)/Report/Unchanged.$(MSBuildProjectName).txt">
+	    <Output PropertyName="DebugMessage" TaskParameter="DebugMessage"/>
+	  </CullFilesFromProject>
   </Target>
 </Project>
