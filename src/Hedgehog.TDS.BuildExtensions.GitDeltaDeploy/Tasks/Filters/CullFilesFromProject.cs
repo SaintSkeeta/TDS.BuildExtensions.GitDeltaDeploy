@@ -57,7 +57,7 @@ namespace Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.Tasks.Filters
                 Log.LogCommandLine("CullFilesFromProject :: Deleted file: " + file);
             }
 
-            foreach (var directory in Directory.EnumerateDirectories(normalizedOutputDir, "*", SearchOption.AllDirectories))
+            foreach (var directory in Directory.EnumerateDirectories(normalizedOutputDir, "*", SearchOption.AllDirectories).OrderByDescending(i => i.Length))
             {
                 if (Directory.GetFiles(directory).Length != 0 || Directory.GetDirectories(directory).Length != 0)
                     continue;
