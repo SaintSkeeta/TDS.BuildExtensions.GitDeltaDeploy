@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
     <metadata>
         <id>Hedgehog.TDS.BuildExtensions.GitDeltaDeploy</id>
-        <version>1.0.0.0</version>
+        <version>1.0.2</version>
         <title>Hedgehog.TDS.BuildExtensions.GitDeltaDeploy</title>
         <authors>Sean Holmesby</authors>
         <owners>Hedgehog</owners>
@@ -14,7 +14,8 @@
         <tags>TDS Sitecore BuildExtensions Git Delta Deploy</tags>
     </metadata>
     <files>
-        <file src=".\Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.targets" target="build\Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.targets" />
-        <file src="bin\Release\Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.dll" target="build\Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.dll" />
+        <file src=".\build\Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.targets" target="build\Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.targets" />
+        <file src="..\Hedgehog.TDS.BuildExtensions.GitDeltaDeploy\bin\Release\Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.dll" target="build\Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.dll" />
+      <file src="..\Hedgehog.TDS.BuildExtensions.GitDeltaDeploy\bin\Debug\Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.dll" target="build\Hedgehog.TDS.BuildExtensions.GitDeltaDeploy_Debug.dll" />
     </files>
 </package>

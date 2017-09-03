@@ -64,7 +64,7 @@
              Text="Solution uses the HedgehogDevelopment.TDS NuGet package. Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.DLL will load from there." />
 
     <Copy Condition="Exists('$(TdsNuGetPackageDllFolder)/HedgehogDevelopment.SitecoreProject.Tasks.dll') and !Exists('$(TdsNuGetPackageDllFolder)/Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.dll')"
-          SourceFiles="$(SolutionDir)/packages/Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.1.0.0.0/build/Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.dll"
+          SourceFiles="$(SolutionDir)/packages/Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.1.0.2/build/Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.dll"
           DestinationFolder="$(TdsNuGetPackageDllFolder)/" />
   </Target>
   <Target Name="GitDiff" Condition="'$(CustomGitDeltaDeploy)' == 'True'">
