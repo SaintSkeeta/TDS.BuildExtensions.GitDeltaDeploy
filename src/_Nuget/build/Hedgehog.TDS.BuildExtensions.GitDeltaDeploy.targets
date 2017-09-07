@@ -109,7 +109,7 @@
 	
     <!-- Discover the .item files that have changed in between the current commit that this repo is at and the last deployment of this project -->
     <Exec Condition="$(GitExists) and '$(PrevIdentifier)' != '' and '$(GitCurrentCommitID)' != ''" 
-          Command="git diff -r --name-only --no-commit-id --no-renames $(PrevIdentifier)..$(GitCurrentCommitID) &quot;*.item&quot; &gt; $(MSBuildProjectDirectory)/Report/ChangedItemFiles.txt" Outputs="$(MSBuildProjectDirectory)/Report/ChangedItemFiles.txt" WorkingDirectory="$(SolutionDir)" />
+          Command="git diff -r --name-only --no-commit-id $(PrevIdentifier)..$(GitCurrentCommitID) &quot;*.item&quot; &gt; $(MSBuildProjectDirectory)/Report/ChangedItemFiles.txt" Outputs="$(MSBuildProjectDirectory)/Report/ChangedItemFiles.txt" WorkingDirectory="$(SolutionDir)" />
   </Target>
 
   <!-- Cull down the deployable items by checking if they exist in the ChangedItemFiles.txt file. -->
