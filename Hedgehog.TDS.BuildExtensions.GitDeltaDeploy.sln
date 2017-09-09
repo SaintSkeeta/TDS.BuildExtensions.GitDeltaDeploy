@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26430.15
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hedgehog.TDS.BuildExtensions.GitDeltaDeploy", "src\Hedgehog.TDS.BuildExtensions.GitDeltaDeploy\Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.csproj", "{43E0930D-01EA-46E0-B302-D0B91581C8EF}"
 EndProject
@@ -12,6 +12,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".config", ".config", "{2B59
 		src\Hedgehog.TDS.BuildExtensions.GitDeltaDeploy\Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.nuspec = src\Hedgehog.TDS.BuildExtensions.GitDeltaDeploy\Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.nuspec
 		src\Hedgehog.TDS.BuildExtensions.GitDeltaDeploy\build\Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.targets = src\Hedgehog.TDS.BuildExtensions.GitDeltaDeploy\build\Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.targets
 		nuget.config = nuget.config
+		src\Hedgehog.TDS.BuildExtensions.GitDeltaDeploy\readme.txt = src\Hedgehog.TDS.BuildExtensions.GitDeltaDeploy\readme.txt
 		TdsGlobal.config = TdsGlobal.config
 	EndProjectSection
 EndProject
@@ -26,11 +27,7 @@ Global
 		{43E0930D-01EA-46E0-B302-D0B91581C8EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{43E0930D-01EA-46E0-B302-D0B91581C8EF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{643AD2CB-73BF-4A78-994C-11168775CC5B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{643AD2CB-73BF-4A78-994C-11168775CC5B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{643AD2CB-73BF-4A78-994C-11168775CC5B}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
 		{643AD2CB-73BF-4A78-994C-11168775CC5B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{643AD2CB-73BF-4A78-994C-11168775CC5B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{643AD2CB-73BF-4A78-994C-11168775CC5B}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
