@@ -12,7 +12,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".config", ".config", "{2B59
 		src\_Nuget\Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.nuspec = src\_Nuget\Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.nuspec
 		src\_Nuget\build\Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.targets = src\_Nuget\build\Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.targets
 		nuget.config = nuget.config
-		src\Hedgehog.TDS.BuildExtensions.GitDeltaDeploy\readme.txt = src\Hedgehog.TDS.BuildExtensions.GitDeltaDeploy\readme.txt
+		src\_Nuget\readme.txt = src\_Nuget\readme.txt
 		TdsGlobal.config = TdsGlobal.config
 	EndProjectSection
 EndProject
