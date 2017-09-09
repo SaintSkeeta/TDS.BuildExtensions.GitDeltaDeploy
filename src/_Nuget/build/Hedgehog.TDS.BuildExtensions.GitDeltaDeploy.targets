@@ -96,6 +96,9 @@
           Command="git rev-parse HEAD" Outputs="$(GitCurrentCommitID)" WorkingDirectory="$(SolutionDir)" ConsoleToMSBuild="true">
       <Output TaskParameter="ConsoleOutput" PropertyName="GitCurrentCommitID" />
     </Exec>
+
+    <CallTarget Condition="$(GitExists) and '$(CustomGitDeltaDeploy)' == 'True'" Targets="OutputLastCommitId"/>
+	
     <Message Condition="'$(GitCurrentCommitID)' != ''" 
              Importance="normal" Text="Current Git Commit is: $(GitCurrentCommitID)" />
 
@@ -148,5 +151,19 @@
 	  <Exec Command="findstr /vig:&quot;$(MSBuildProjectDirectory)\Report\DiffFiles.$(MSBuildProjectName).txt&quot; &quot;$(MSBuildProjectDirectory)\Report\AllFiles.$(MSBuildProjectName).txt&quot; &gt; &quot;$(MSBuildProjectDirectory)\Report\Unchanged.$(MSBuildProjectName).txt&quot;" Outputs="$(MSBuildProjectDirectory)\Report\Unchanged.$(MSBuildProjectName).txt" WorkingDirectory="$(SolutionDir)" />
 
 	  <CullFilesFromProject OutputPath="$(_OutputPath)" UnchangedFiles="$(MSBuildProjectDirectory)/Report/Unchanged.$(MSBuildProjectName).txt" />
+  </Target>
+
+  <Target Name="OutputLastCommitId" Condition="'$(CustomGitDeltaDeploy)' == 'True'">
+	<PropertyGroup>
+      <DeltaFolder Condition="'$(OutDir)' != '$(OutputPath)' and '$(OutDir)' != ''">$(OutDir)Delta</DeltaFolder>
+      <DeltaFolder Condition="'$(OutDir)' == '$(OutputPath)' or '$(OutDir)' == ''">$(MSBuildProjectDirectory)\bin\Delta</DeltaFolder>
+    </PropertyGroup>
+  
+    <Message Importance="normal" Text="Storing the LastDeploymentGitCommitId.txt file to build output directory: $(DeltaFolder)." />
+
+	<MakeDir Condition="!Exists('$(DeltaFolder)')"
+         Directories="$(DeltaFolder)" />
+	
+    <Exec Command="git rev-parse HEAD &gt; $(DeltaFolder)\LastDeploymentGitCommitId.txt" Outputs="$(DeltaFolder)\LastDeploymentGitCommitId.txt" WorkingDirectory="$(SolutionDir)"  />
   </Target>
 </Project>
