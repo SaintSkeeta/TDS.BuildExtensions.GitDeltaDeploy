@@ -1,0 +1,50 @@
+install:
+  - choco install gitversion.portable -pre -y
+  - nuget sources add -Name MyAccountFeed -Source https://ci.appveyor.com/nuget/seanholmesby-a4t5wrp1ias0 -UserName %nuget_user% -Password %nuget_password%
+
+nuget:
+  account_feed: false
+
+#---------------------------------#
+#       build configuration       #
+#---------------------------------#
+
+# build platform, i.e. x86, x64, Any CPU. This setting is optional.
+platform: Any CPU
+
+# build Configuration, i.e. Debug, Release, etc.
+configuration:
+  - Debug
+  - Release
+
+before_build:
+  - nuget restore Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.sln
+  - ps: gitversion /l console /output buildserver /updateAssemblyInfo
+
+build_script:
+  - cmd: msbuild Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.sln /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll" /verbosity:normal /p:PackageVersion=%GitVersion_SemVer%
+
+after_build:
+- cmd: nuget pack "src\_Nuget\Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.nuspec" -version "%GitVersion_SemVer%"
+
+#---------------------------------#
+#      artifacts configuration    #
+#---------------------------------#
+artifacts:
+
+  - path: src\_NuGet\*.nupkg
+  - path: src\Hedgehog.TDS.BuildExtensions.GitDeltaDeploy\bin\*\Hedgehog.TDS.BuildExtensions.GitDeltaDeploy*
+
+#---------------------------------#
+#      deploy configuration    #
+#---------------------------------#
+deploy:
+  description: 'Hedgehog.TDS.Extensions.GitDeltaDeploy'
+  provider: GitHub
+  auth_token:
+    secure: vMfLJBfd7tN7ijjHaiJ1DSbqJzKP7M0i0zJ4k2SSFPj/t+vl9Kp+jFPt/wExjXOa # your encrypted token from GitHub
+  artifact: /.*\.nupkg/
+  draft: false
+  prerelease: false
+  on:
+    appveyor_repo_tag: true        # deploy on tag push only
