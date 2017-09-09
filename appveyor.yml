@@ -13,16 +13,17 @@ nuget:
 platform: Any CPU
 
 # build Configuration, i.e. Debug, Release, etc.
-configuration:
-  - Debug
-  - Release
+#configuration:
+#  - Debug
+#  - Release
 
 before_build:
   - nuget restore Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.sln
   - ps: gitversion /l console /output buildserver /updateAssemblyInfo
 
 build_script:
-  - cmd: msbuild Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.sln /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll" /verbosity:normal /p:PackageVersion=%GitVersion_SemVer%
+  - cmd: msbuild Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.sln /configuration "Debug" /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll" /verbosity:normal /p:PackageVersion=%GitVersion_SemVer%
+  - cmd: msbuild Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.sln /configuration "Release" /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll" /verbosity:normal /p:PackageVersion=%GitVersion_SemVer%
 
 after_build:
 - cmd: nuget pack "src\_Nuget\Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.nuspec" -version "%GitVersion_SemVer%"
