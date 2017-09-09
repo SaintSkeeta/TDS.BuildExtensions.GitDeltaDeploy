@@ -33,7 +33,7 @@ after_build:
 #---------------------------------#
 artifacts:
 
-  - path: src\_NuGet\*.nupkg
+  - path: Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.*.nupkg
   - path: src\Hedgehog.TDS.BuildExtensions.GitDeltaDeploy\bin\*\Hedgehog.TDS.BuildExtensions.GitDeltaDeploy*
 
 #---------------------------------#
