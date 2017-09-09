@@ -17,9 +17,9 @@
       <tags>TDS Sitecore BuildExtensions Git Delta Deploy</tags>
     </metadata>
     <files>
-      <file src=".\build\Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.targets" target="build\Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.targets" />
+      <file src="build\Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.targets" target="build\Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.targets" />
       <file src="..\Hedgehog.TDS.BuildExtensions.GitDeltaDeploy\bin\Release\Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.dll" target="build\Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.dll" />
       <file src="..\Hedgehog.TDS.BuildExtensions.GitDeltaDeploy\bin\Debug\Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.dll" target="build\Hedgehog.TDS.BuildExtensions.GitDeltaDeploy_Debug.dll" />
-      <file src=".\readme.txt" target="readme.txt" />
+      <file src="readme.txt" target="readme.txt" />
     </files>
 </package>
