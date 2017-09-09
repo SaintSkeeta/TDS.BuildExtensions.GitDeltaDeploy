@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+    <metadata>
+        <id>Hedgehog.TDS.BuildExtensions.GitDeltaDeploy</id>
+        <version>1.0.2</version>
+        <title>Hedgehog.TDS.BuildExtensions.GitDeltaDeploy</title>
+        <authors>Sean Holmesby</authors>
+        <owners>Hedgehog</owners>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>Adds Team Development for Sitecore (TDS) Classic custom targets file to the TDS project, for using a custom delta deployment using Git.</description>
+        <summary>Custom git delta deploy build extension for Team Development for Sitecore (TDS) Classic by Hedgehog.</summary>
+        <releaseNotes>If you're not using the HedgehogDevelopment.TDS NuGet packages, ensure you copy the build/Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.dll to your MSBuild Hedgehog directory (C:\Program Files (x86)\MSBuild\HedgehogDevelopment\SitecoreProject\v9.0).</releaseNotes>
+        <copyright>Copyright © Hedgehog 2015, 2016, 2017</copyright>
+        <tags>TDS Sitecore BuildExtensions Git Delta Deploy</tags>
+    </metadata>
+    <files>
+        <file src=".\build\Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.targets" target="build\Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.targets" />
+        <file src="..\Hedgehog.TDS.BuildExtensions.GitDeltaDeploy\bin\Release\Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.dll" target="build\Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.dll" />
+      <file src="..\Hedgehog.TDS.BuildExtensions.GitDeltaDeploy\bin\Debug\Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.dll" target="build\Hedgehog.TDS.BuildExtensions.GitDeltaDeploy_Debug.dll" />
+    </files>
+</package>
