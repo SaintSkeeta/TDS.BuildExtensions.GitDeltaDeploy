@@ -1,4 +1,5 @@
-﻿using HedgehogDevelopment.SitecoreCommon.Data.Items;
+﻿using System;
+using HedgehogDevelopment.SitecoreCommon.Data.Items;
 using HedgehogDevelopment.SitecoreProject.Tasks.Extensibility;
 using System.IO;
 using System.Linq;
@@ -7,6 +8,14 @@ namespace Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.Tasks.Filters
 {
     public class CullItemsFromProjectByExistanceInChangedItemsFile : ICanIncludeItem
     {
+        private static string[] _changedFiles;
+
+        private static bool _fileRead;
+
+#if DEBUG
+        private static bool _changedFilesWritten;
+#endif
+
         public bool IncludeItemInBuild(string parameters, IItem parsedItem, string filePath)
         {
             if (!File.Exists(parameters))
@@ -14,22 +23,32 @@ namespace Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.Tasks.Filters
                 return true;
             }
 
-            var changedFiles = File.ReadAllLines(parameters);
-
-            var convertedFilePath = filePath.Replace(@"\", @"/");
-
-#if DEBUG
-            var folderPath = Path.GetDirectoryName(parameters);
-            var sw = new StreamWriter(folderPath + @"\DeltaDeployCompare.txt", true);
-            sw.WriteLine("TDS Item filePath is " + convertedFilePath);
-
-            foreach (var file in changedFiles)
+            if (!_fileRead)
             {
-                sw.WriteLine("Git changed item file path is " + file);
+                Console.WriteLine("Opening file changed items file: " + parameters);
+                _changedFiles = File.ReadAllLines(parameters);
+                _fileRead = true;
+                Console.WriteLine("Finished reading changed items file: " + parameters);
             }
 
-            sw.WriteLine("----");
-            sw.Close();
+            // ".." is required to consume bundled projects properly
+            var convertedFilePath = filePath.Replace(@"\", @"/").Split(new[] { ".." }, StringSplitOptions.None).Last();
+
+#if DEBUG
+            Console.WriteLine("File path: " + filePath);
+
+            var folderPath = Path.GetDirectoryName(parameters);
+            var sw = new StreamWriter(folderPath + @"\DeltaDeployCompare.txt", true);
+            
+            if (!_changedFilesWritten)
+            {
+                foreach (var file in _changedFiles)
+                {
+                    sw.WriteLine("Git changed item file path is " + file);
+                }
+                sw.WriteLine("----");
+                _changedFilesWritten = true;
+            }
 #endif
             // filePaths formats
             //   Update package creation: absolute path
@@ -42,7 +61,20 @@ namespace Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.Tasks.Filters
             //   relative path from repo root, 
             //     e.g. TDSProjects/TDS.Master/sitecore/content/myitem.item
 
-            return changedFiles.Any(x => convertedFilePath.EndsWith(x)) || changedFiles.Any(x => x.EndsWith(convertedFilePath));
+            var addItem = _changedFiles.Any(x => convertedFilePath.EndsWith(x)) || _changedFiles.Any(x => x.EndsWith(convertedFilePath));
+
+#if DEBUG
+            if (!addItem)
+            {
+                sw.WriteLine("-- Item not added: " + convertedFilePath);
+            }
+            else
+            {
+                sw.WriteLine("++ Item added: " + convertedFilePath);
+            }
+            sw.Close();
+#endif
+            return addItem;
         }
     }
 }
