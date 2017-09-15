@@ -4,7 +4,7 @@
       <id>Hedgehog.TDS.BuildExtensions.GitDeltaDeploy</id>
       <version>$version$</version>
       <title>Hedgehog.TDS.BuildExtensions.GitDeltaDeploy</title>
-      <authors>Sean Holmesby</authors>
+      <authors>Sean Holmesby (Hedgehog), John Rappel (GeekHive)</authors>
       <owners>Hedgehog</owners>
       <projectUrl>https://github.com/SaintSkeeta/TDS.BuildExtensions.GitDeltaDeploy</projectUrl>
       <licenseUrl>https://github.com/SaintSkeeta/TDS.BuildExtensions.GitDeltaDeploy/blob/master/LICENSE</licenseUrl>
@@ -12,7 +12,7 @@
       <requireLicenseAcceptance>false</requireLicenseAcceptance>
       <description>Adds Team Development for Sitecore (TDS) Classic custom targets file to the TDS project, for using a custom delta deployment using Git.</description>
       <summary>Custom git delta deploy build extension for Team Development for Sitecore (TDS) Classic by Hedgehog.</summary>
-      <releaseNotes>Added ability to have a delta based on tags, and output commit reference to output folder (for Octopus Deploy). Also added ability to do a delta on files, not just items.</releaseNotes>
+      <releaseNotes>Fix for multi-project bundling in update packages. Performance improvements for the file name compare.</releaseNotes>
       <copyright>Copyright © Hedgehog 2015, 2016, 2017</copyright>
       <tags>TDS Sitecore BuildExtensions Git Delta Deploy</tags>
     </metadata>
