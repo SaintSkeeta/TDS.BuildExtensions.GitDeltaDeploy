@@ -1,6 +1,4 @@
-<img src="http://www.hhog.com/-/media/A9D166C5F91A41CF9A12BB50E3B29A51.svg" alt="Hedgehog Development" border="0"> 
-
-# Hedgehog #
+<img src="http://www.hhog.com/-/media/PublicImages/Hedgehog/Hedgehog-logo-4color-275x46.jpg" alt="Hedgehog Development" border="0"> 
 
 
 # TDS.BuildExtensions.GitDeltaDeploy #

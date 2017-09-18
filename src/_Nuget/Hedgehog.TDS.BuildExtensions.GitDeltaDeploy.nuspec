@@ -8,7 +8,7 @@
       <owners>Hedgehog</owners>
       <projectUrl>https://github.com/SaintSkeeta/TDS.BuildExtensions.GitDeltaDeploy</projectUrl>
       <licenseUrl>https://github.com/SaintSkeeta/TDS.BuildExtensions.GitDeltaDeploy/blob/master/LICENSE</licenseUrl>
-      <iconUrl>https://www.teamdevelopmentforsitecore.com/-/media/TDS/Images/Callouts/tds-logo.png</iconUrl>
+      <iconUrl>https://www.teamdevelopmentforsitecore.com/-/media/publicimages/team%20development%20for%20sitecore/100x100/tds-classic-icon-100x100.jpg</iconUrl>
       <requireLicenseAcceptance>false</requireLicenseAcceptance>
       <description>Adds Team Development for Sitecore (TDS) Classic custom targets file to the TDS project, for using a custom delta deployment using Git.</description>
       <summary>Custom git delta deploy build extension for Team Development for Sitecore (TDS) Classic by Hedgehog.</summary>
