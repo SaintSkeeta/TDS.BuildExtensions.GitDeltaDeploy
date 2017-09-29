@@ -52,6 +52,21 @@
         ]]></Code>
     </Task>
   </UsingTask>
+  <UsingTask TaskName="GetFileSize" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
+    <ParameterGroup>
+      <FileName Required="true" />
+      <FileSize ParameterType="System.Int64" Output="true"/>
+    </ParameterGroup>
+    <Task>
+      <Using Namespace="System.IO"/>
+      <Code Type="Fragment" Language="cs">
+        <![CDATA[
+        FileInfo fi = new FileInfo(FileName);
+        FileSize = fi.Length;
+        ]]>
+      </Code>
+    </Task>
+  </UsingTask>
   <UsingTask AssemblyFile="Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.dll" TaskName="Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.Tasks.Filters.CullFilesFromProject"/>
   <Target Name="BeforeSitecoreBuild" Condition="'$(CustomGitDeltaDeploy)' == 'True'">
     <GetTdsNuGetPackageFolder PackagesFolderPath="$(SolutionDir)/packages/">
@@ -63,9 +78,50 @@
     <Message Condition="$(TdsNuGetPackageDllFolder) != ''"
              Text="Solution uses the HedgehogDevelopment.TDS NuGet package. Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.DLL will load from there." />
 
-    <Copy Condition="Exists('$(TdsNuGetPackageDllFolder)/HedgehogDevelopment.SitecoreProject.Tasks.dll') and !Exists('$(TdsNuGetPackageDllFolder)/Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.dll')"
+    <PropertyGroup>
+      <NugetUse Condition="Exists('$(TdsNuGetPackageDllFolder)/HedgehogDevelopment.SitecoreProject.Tasks.dll') and Exists('$(TdsNuGetPackageDllFolder)/Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.dll')">NugetDeltaExists</NugetUse>
+      <NugetUse Condition="Exists('$(TdsNuGetPackageDllFolder)/HedgehogDevelopment.SitecoreProject.Tasks.dll') and !Exists('$(TdsNuGetPackageDllFolder)/Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.dll')">NugetDeltaDoesNotExist</NugetUse>
+    </PropertyGroup>
+    
+    <Message Condition="$(NugetUse) == 'NugetDeltaExists'"
+             Text="GitDeltaDeploy.DLL exists in NuGet folder, checking version..." />
+
+    <GetFileSize Condition="$(NugetUse) == 'NugetDeltaExists'" FileName="$(TdsNuGetPackageDllFolder)/Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.dll">
+      <Output TaskParameter="FileSize" PropertyName="NuGetFileSize" />
+    </GetFileSize>
+
+    <GetFileSize Condition="$(NugetUse) == 'NugetDeltaExists'" FileName="$(MSBuildThisFileDirectory)/Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.dll">
+      <Output TaskParameter="FileSize" PropertyName="ProjectFileSize" />
+    </GetFileSize>
+
+    <Message Condition="$(NugetUse) == 'NugetDeltaExists'"
+             Text="NuGet Version of GitDeltaDeploy.DLL is $(NuGetFileSize) bytes" />
+
+    <Message Condition="$(NugetUse) == 'NugetDeltaExists'"
+             Text="Project Version of GitDeltaDeploy.DLL is $(ProjectFileSize) bytes" />
+
+    <PropertyGroup Condition="$(NugetUse) == 'NugetDeltaExists'">
+      <IncorrectVersion Condition="$(NuGetFileSize) != $(ProjectFileSize)">True</IncorrectVersion>
+      <IncorrectVersion Condition="$(NuGetFileSize) == $(ProjectFileSize)">False</IncorrectVersion>
+    </PropertyGroup>
+
+    <Message Condition="$(IncorrectVersion) == 'True'"
+             Text="Version mismatch found in NuGet folder, copying $(MSBuildThisFileDirectory)/Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.DLL to $(TdsNuGetPackageDllFolder)/" />
+
+    <Message Condition="$(IncorrectVersion) == 'False'"
+             Text="NuGet and Project Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.DLL match, using existing version." />
+
+    <Copy Condition="$(NugetUse) == 'NugetDeltaExists' and $(IncorrectVersion) == 'True'"
           SourceFiles="$(MSBuildThisFileDirectory)/Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.dll"
           DestinationFolder="$(TdsNuGetPackageDllFolder)/" />
+    
+    <Message Condition="$(NugetUse) == 'NugetDeltaDoesNotExist'"
+         Text="GitDeltaDeploy.DLL does not exist in NuGet folder, copying Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.DLL to $(TdsNuGetPackageDllFolder)." />
+
+    <Copy Condition="$(NugetUse) == 'NugetDeltaDoesNotExist'"
+          SourceFiles="$(MSBuildThisFileDirectory)/Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.dll"
+          DestinationFolder="$(TdsNuGetPackageDllFolder)/" />
+    
   </Target>
   <Target Name="GitDiff" Condition="'$(CustomGitDeltaDeploy)' == 'True'">
     <Message Importance="" Text="Discovering changed items files since the last local deployment of this project." />
