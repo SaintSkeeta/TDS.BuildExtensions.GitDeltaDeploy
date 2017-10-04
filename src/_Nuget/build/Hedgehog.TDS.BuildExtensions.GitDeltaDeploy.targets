@@ -39,7 +39,8 @@
       <Using Namespace="System" />
       <Using Namespace="System.IO" />
       <Using Namespace="System.Text.RegularExpressions" />
-      <Code Type="Fragment" Language="cs"><![CDATA[
+      <Code Type="Fragment" Language="cs">
+        <![CDATA[
         var values = Environment.GetEnvironmentVariable("PATH");
         foreach (var path in values.Split(';')) {
             var fullPath = Path.Combine(path, FileName);
@@ -49,7 +50,22 @@
             }
         }
         Exists = false;
-        ]]></Code>
+        ]]>
+      </Code>
+    </Task>
+  </UsingTask>
+  <UsingTask TaskName="CountLinesInFile" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
+    <ParameterGroup>
+      <FileName Required="true" />
+      <Lines ParameterType="System.Int64" Output="true"/>
+    </ParameterGroup>
+    <Task>
+      <Using Namespace="System.IO"/>
+      <Code Type="Fragment" Language="cs">
+        <![CDATA[
+		Lines = File.ReadLines(FileName).Count();
+        ]]>
+      </Code>
     </Task>
   </UsingTask>
   <UsingTask AssemblyFile="Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.dll" TaskName="Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.Tasks.Filters.CullFilesFromProject"/>
@@ -81,14 +97,14 @@
                        File="$(MSBuildProjectDirectory)/Report/LastDeploymentGitCommitId.txt" >
       <Output TaskParameter="Lines" PropertyName="LastDeploymentGitCommitID" />
     </ReadLinesFromFile>
-    <Message Condition="'$(LastDeploymentGitCommitID)' != ''" 
-             Importance="normal" 
+    <Message Condition="'$(LastDeploymentGitCommitID)' != ''"
+             Importance="normal"
              Text="Last Deployment Git Commit ID is : $(LastDeploymentGitCommitID)" />
     <Message Condition="'$(LastDeploymentGitCommitID)' == '' and '$(LastDeploymentGitTagName)' == ''"
-             Importance="normal" 
+             Importance="normal"
              Text="Neither Last Deployment Git Commit ID or Last Deployment Git Tag Name exist. The entire TDS project will be deployed without using the custom git delta deploy feature." />
-    <Message Condition="'$(LastDeploymentGitTagName)' != ''" 
-             Importance="normal" 
+    <Message Condition="'$(LastDeploymentGitTagName)' != ''"
+             Importance="normal"
              Text="Last Deployment Git Tag Name is : $(LastDeploymentGitTagName)" />
 
     <!-- Retrieve the git commit ID of the current git repo and store it in the GitCurrentCommitID property. -->
@@ -99,19 +115,19 @@
 
     <CallTarget Condition="$(GitExists) and '$(CustomGitDeltaDeploy)' == 'True'" Targets="OutputLastCommitId"/>
 
-    <Message Condition="'$(GitCurrentCommitID)' != ''" 
+    <Message Condition="'$(GitCurrentCommitID)' != ''"
              Importance="normal" Text="Current Git Commit is: $(GitCurrentCommitID)" />
 
     <MakeDir Condition="!Exists('$(MSBuildProjectDirectory)/Report')"
          Directories="$(MSBuildProjectDirectory)/Report" />
-    
+
     <PropertyGroup>
       <PrevIdentifier Condition="'$(LastDeploymentGitTagName)' != ''">$(LastDeploymentGitTagName)</PrevIdentifier>
       <PrevIdentifier Condition="'$(LastDeploymentGitTagName)' == '' and '$(LastDeploymentGitCommitID)' != ''">$(LastDeploymentGitCommitID)</PrevIdentifier>
     </PropertyGroup>
 
     <!-- Discover the .item files that have changed in between the current commit that this repo is at and the last deployment of this project -->
-    <Exec Condition="$(GitExists) and '$(PrevIdentifier)' != '' and '$(GitCurrentCommitID)' != ''" 
+    <Exec Condition="$(GitExists) and '$(PrevIdentifier)' != '' and '$(GitCurrentCommitID)' != ''"
           Command="git diff -r --name-only --no-commit-id $(PrevIdentifier)..$(GitCurrentCommitID) &quot;*.item&quot; &gt; $(MSBuildProjectDirectory)/Report/ChangedItemFiles.txt" Outputs="$(MSBuildProjectDirectory)/Report/ChangedItemFiles.txt" WorkingDirectory="$(SolutionDir)" />
   </Target>
 
@@ -135,22 +151,28 @@
 
     <Exec Condition="$(GitExists)"
           Command="git rev-parse HEAD &gt; $(MSBuildProjectDirectory)/Report/LastDeploymentGitCommitId.txt" Outputs="$(MSBuildProjectDirectory)/Report/LastDeploymentGitCommitId.txt" WorkingDirectory="$(SolutionDir)"  />
-    </Target>
+  </Target>
 
-    <Target Name="AfterSitecoreBuild" Condition="'$(CullProjectFiles)' == 'True'" DependsOnTargets="GitDiff">
+  <Target Name="AfterSitecoreBuild" Condition="'$(CullProjectFiles)' == 'True'" DependsOnTargets="GitDiff">
     <!-- list all files -->
     <Message Importance="normal" Text="git ls-files --full-name &gt; &quot;$(MSBuildProjectDirectory)/Report/AllFiles.$(MSBuildProjectName).txt&quot;" />
     <Exec Command="git ls-files --full-name &gt; &quot;$(MSBuildProjectDirectory)/Report/AllFiles.$(MSBuildProjectName).txt&quot;" Outputs="$(MSBuildProjectDirectory)/Report/AllFiles.$(MSBuildProjectName).txt" WorkingDirectory="$(SolutionDir)" />
-  
+
     <!-- list changed files -->
     <Message Importance="normal" Text="git diff --name-only $(PrevIdentifier)..$(GitCurrentCommitID) &gt; &quot;$(MSBuildProjectDirectory)/Report/DiffFiles.$(MSBuildProjectName).txt&quot;" />
     <Exec Command="git diff --name-only $(PrevIdentifier)..$(GitCurrentCommitID) &gt; &quot;$(MSBuildProjectDirectory)/Report/DiffFiles.$(MSBuildProjectName).txt&quot;" Outputs="$(MSBuildProjectDirectory)/Report/DiffFiles.$(MSBuildProjectName).txt" WorkingDirectory="$(SolutionDir)" />
-  
-    <!-- aggregate into single file listing only unchanged files -->
-    <Message Importance="normal" Text="findstr /vig:&quot;$(MSBuildProjectDirectory)\Report\DiffFiles.$(MSBuildProjectName).txt&quot; &quot;$(MSBuildProjectDirectory)\Report\AllFiles.$(MSBuildProjectName).txt&quot; &gt; &quot;$(MSBuildProjectDirectory)\Report\Unchanged.$(MSBuildProjectName).txt&quot;" />
-    <Exec Command="findstr /vig:&quot;$(MSBuildProjectDirectory)\Report\DiffFiles.$(MSBuildProjectName).txt&quot; &quot;$(MSBuildProjectDirectory)\Report\AllFiles.$(MSBuildProjectName).txt&quot; &gt; &quot;$(MSBuildProjectDirectory)\Report\Unchanged.$(MSBuildProjectName).txt&quot;" Outputs="$(MSBuildProjectDirectory)\Report\Unchanged.$(MSBuildProjectName).txt" WorkingDirectory="$(SolutionDir)" />
 
-    <CullFilesFromProject OutputPath="$(_OutputPath)" UnchangedFiles="$(MSBuildProjectDirectory)/Report/Unchanged.$(MSBuildProjectName).txt" />
+    <!-- aggregate into single file listing only unchanged files -->
+    <CountLinesInFile FileName="$(MSBuildProjectDirectory)/Report/DiffFiles.$(MSBuildProjectName).txt">
+      <Output TaskParameter="Lines" PropertyName="ChangedItemsLength" />
+    </CountLinesInFile>
+
+    <Message Condition="$(ChangedItemsLength) == 0" Importance="normal" Text="No changed items found in: $(MSBuildProjectDirectory)\Report\DiffFiles.$(MSBuildProjectName).txt" />
+
+    <Message Condition="$(ChangedItemsLength) > 0" Importance="normal" Text="findstr /vig:&quot;$(MSBuildProjectDirectory)\Report\DiffFiles.$(MSBuildProjectName).txt&quot; &quot;$(MSBuildProjectDirectory)\Report\AllFiles.$(MSBuildProjectName).txt&quot; &gt; &quot;$(MSBuildProjectDirectory)\Report\Unchanged.$(MSBuildProjectName).txt&quot;" />
+    <Exec Condition="$(ChangedItemsLength) > 0" Command="findstr /vig:&quot;$(MSBuildProjectDirectory)\Report\DiffFiles.$(MSBuildProjectName).txt&quot; &quot;$(MSBuildProjectDirectory)\Report\AllFiles.$(MSBuildProjectName).txt&quot; &gt; &quot;$(MSBuildProjectDirectory)\Report\Unchanged.$(MSBuildProjectName).txt&quot;" Outputs="$(MSBuildProjectDirectory)\Report\Unchanged.$(MSBuildProjectName).txt" WorkingDirectory="$(SolutionDir)" />
+
+    <CullFilesFromProject Condition="$(ChangedItemsLength) > 0" OutputPath="$(_OutputPath)" UnchangedFiles="$(MSBuildProjectDirectory)/Report/Unchanged.$(MSBuildProjectName).txt" />
   </Target>
 
   <Target Name="OutputLastCommitId" Condition="'$(CustomGitDeltaDeploy)' == 'True'">
@@ -158,7 +180,7 @@
       <DeltaFolder Condition="'$(OutDir)' != '$(OutputPath)' and '$(OutDir)' != ''">$(OutDir)Delta</DeltaFolder>
       <DeltaFolder Condition="'$(OutDir)' == '$(OutputPath)' or '$(OutDir)' == ''">$(MSBuildProjectDirectory)\bin\Delta</DeltaFolder>
     </PropertyGroup>
-  
+
     <Message Importance="normal" Text="Storing the LastDeploymentGitCommitId.txt file to build output directory: $(DeltaFolder)." />
 
     <MakeDir Condition="!Exists('$(DeltaFolder)')"
