@@ -12,7 +12,7 @@
       <requireLicenseAcceptance>false</requireLicenseAcceptance>
       <description>Adds Team Development for Sitecore (TDS) Classic custom targets file to the TDS project, for using a custom delta deployment using Git.</description>
       <summary>Custom git delta deploy build extension for Team Development for Sitecore (TDS) Classic by Hedgehog.</summary>
-      <releaseNotes>Fix for multi-project bundling in update packages. Performance improvements for the file name compare.</releaseNotes>
+      <releaseNotes>Fix for project paths with spaces. Fix for no files changes in Delta File Deployment.</releaseNotes>
       <copyright>Copyright © Hedgehog 2015, 2016, 2017</copyright>
       <tags>TDS Sitecore BuildExtensions Git Delta Deploy</tags>
     </metadata>
