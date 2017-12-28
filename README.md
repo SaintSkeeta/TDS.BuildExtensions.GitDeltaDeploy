@@ -1,4 +1,4 @@
-<img src="http://www.hhog.com/-/media/PublicImages/Hedgehog/Hedgehog-logo-4color-275x46.jpg" alt="Hedgehog Development" border="0"> 
+<img src="https://www.hhog.com/-/media/PublicImages/Hedgehog/Hedgehog-logo-4color-275x46.jpg" alt="Hedgehog Development" border="0"> 
 
 
 # TDS.BuildExtensions.GitDeltaDeploy #
@@ -10,7 +10,12 @@ A custom delta deploy step for TDS deployments using Git.
 
 NuGet package available: [Hedgehog.TDS.BuildExtensions.GitDeltaDeploy](https://www.nuget.org/packages/Hedgehog.TDS.BuildExtensions.GitDeltaDeploy)
 
-Blog Post about this feature. [http://www.seanholmesby.com/true-delta-deploys-with-tds-classic/](http://www.seanholmesby.com/true-delta-deploys-with-tds-classic/)
+Detailed Blog Post
+ - [http://www.seanholmesby.com/true-delta-deploys-with-tds-classic/](http://www.seanholmesby.com/true-delta-deploys-with-tds-classic/)
+
+Enhancements from Geekhive's John Rappel
+ - [https://www.geekhive.com/buzz/post/2017/09/enhancements-sitecore-true-delta-deploy-tds-git/](https://www.geekhive.com/buzz/post/2017/09/enhancements-sitecore-true-delta-deploy-tds-git/)
+ - [https://sitecorerap.wordpress.com/2017/09/15/fully-automating-git-delta-deploys-in-sitecore/](https://sitecorerap.wordpress.com/2017/09/15/fully-automating-git-delta-deploys-in-sitecore/)
 
 ## Usage ##
  - Ensure you have git.exe in your PATH environment variable.
