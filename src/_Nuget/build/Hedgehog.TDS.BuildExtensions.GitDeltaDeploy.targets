@@ -63,7 +63,7 @@
       <Using Namespace="System.IO"/>
       <Code Type="Fragment" Language="cs">
         <![CDATA[
-		Lines = File.ReadLines(FileName).Count();
+				Lines = File.ReadLines(FileName).Count();
         ]]>
       </Code>
     </Task>
@@ -99,14 +99,14 @@
           SourceFiles="$(MSBuildThisFileDirectory)/Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.dll"
           DestinationFolder="$(TdsNuGetPackageDllFolder)/" />
 
-    <!-- GitDeltaDll exists in NuGet folder -->
+    <!-- GitDeltaDll already exists in NuGet folder -->
+    <Message Condition="$(NuGetUsed) == 'True' and $(GitDeltaNuGet) == 'True'" Text="GitDeltaDeploy.DLL exists in NuGet folder" />
 
+    <!-- If the DLL looks old, copy it over again. -->
     <PropertyGroup Condition="$(NuGetUsed) == 'True' and $(GitDeltaNuGet) == 'True'">
       <NuGetDllDate>$([System.IO.File]::GetLastWriteTime('$(TdsNuGetPackageDllFolder)/Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.dll'))</NuGetDllDate>
       <ProjectDllDate>$([System.IO.File]::GetLastWriteTime('$(MSBuildThisFileDirectory)/Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.dll'))</ProjectDllDate>
     </PropertyGroup>
-
-    <Message Condition="$(NuGetUsed) == 'True' and $(GitDeltaNuGet) == 'True'" Text="GitDeltaDeploy.DLL exists in NuGet folder" />
 
     <Copy Condition="$(NuGetUsed) == 'True' and ($(NuGetDllDate) != $(ProjectDllDate))"
           SourceFiles="$(MSBuildThisFileDirectory)/Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.dll"
