@@ -158,7 +158,7 @@
 
     <!-- Discover the .item files that have changed in between the current commit that this repo is at and the last deployment of this project -->
     <Exec Condition="$(GitExists) and '$(PrevIdentifier)' != '' and '$(GitCurrentCommitID)' != ''"
-          Command="git diff -r --name-only --no-commit-id $(PrevIdentifier)..$(GitCurrentCommitID) &quot;*.item&quot; &gt; $(MSBuildProjectDirectory)/Report/ChangedItemFiles.txt" Outputs="$(MSBuildProjectDirectory)/Report/ChangedItemFiles.txt" WorkingDirectory="$(SolutionDir)" />
+          Command="git diff -r --name-only --no-commit-id $(PrevIdentifier)..$(GitCurrentCommitID) &quot;*.item&quot; &gt; &quot;$(MSBuildProjectDirectory)/Report/ChangedItemFiles.txt&quot;" Outputs="$(MSBuildProjectDirectory)/Report/ChangedItemFiles.txt" WorkingDirectory="$(SolutionDir)" />
   </Target>
 
   <!-- Cull down the deployable items by checking if they exist in the ChangedItemFiles.txt file. -->
@@ -180,7 +180,7 @@
     <Message Importance="normal" Text="Setting the LastDeploymentGitCommitId.txt value to the latest git commit ID." />
 
     <Exec Condition="$(GitExists)"
-          Command="git rev-parse HEAD &gt; $(MSBuildProjectDirectory)/Report/LastDeploymentGitCommitId.txt" Outputs="$(MSBuildProjectDirectory)/Report/LastDeploymentGitCommitId.txt" WorkingDirectory="$(SolutionDir)"  />
+          Command="git rev-parse HEAD &gt; &quot;$(MSBuildProjectDirectory)/Report/LastDeploymentGitCommitId.txt&quot;" Outputs="$(MSBuildProjectDirectory)/Report/LastDeploymentGitCommitId.txt" WorkingDirectory="$(SolutionDir)"  />
   </Target>
 
   <Target Name="AfterSitecoreBuild" Condition="'$(CullProjectFiles)' == 'True'" DependsOnTargets="GitDiff">
@@ -216,6 +216,6 @@
     <MakeDir Condition="!Exists('$(DeltaFolder)')"
          Directories="$(DeltaFolder)" />
 
-    <Exec Command="git rev-parse HEAD &gt; $(DeltaFolder)\LastDeploymentGitCommitId.txt" Outputs="$(DeltaFolder)\LastDeploymentGitCommitId.txt" WorkingDirectory="$(SolutionDir)"  />
+    <Exec Command="git rev-parse HEAD &gt; &quot;$(DeltaFolder)\LastDeploymentGitCommitId.txt&quot;" Outputs="$(DeltaFolder)\LastDeploymentGitCommitId.txt" WorkingDirectory="$(SolutionDir)"  />
   </Target>
 </Project>
