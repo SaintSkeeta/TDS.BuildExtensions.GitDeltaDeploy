@@ -1,8 +1,8 @@
-<img src="https://www.hhog.com/-/media/PublicImages/Hedgehog/Hedgehog-logo-4color-275x46.jpg" alt="Hedgehog Development" border="0"> 
+<img src="https://avatars0.githubusercontent.com/u/1766826?s=400&u=1ebe7c83124f453defd5467a6cae5cb127c81840&v=4" alt="Hedgehog Development" border="0"> 
 
 
 # TDS.BuildExtensions.GitDeltaDeploy #
-A custom delta deploy step for TDS deployments using Git.
+A custom delta deploy step for Sitecore TDS deployments using Git.
 
 [![Build status](https://ci.appveyor.com/api/projects/status/biqveu6ugx859i2f?svg=true)](https://ci.appveyor.com/project/SeanHolmesby/tds-buildextensions-gitdeltadeploy/branch/master)
 [![NuGet](https://img.shields.io/nuget/v/Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.svg?maxAge=2592000)](https://www.nuget.org/packages/Hedgehog.TDS.BuildExtensions.GitDeltaDeploy)
@@ -23,7 +23,7 @@ Enhancements from Geekhive's John Rappel
    - if your TDS projects DON'T use the HedgehogDevelopment.TDS NuGet package, you need to copy the packages/Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.x.x.x/build/Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.dll file to your Hedgehog MSBuild directory (C:\Program Files (x86)\MSBuild\HedgehogDevelopment\SitecoreProject\v9.0).
    - if you DO use the HedgehogDevelopment.TDS NuGet package, the build will copy the Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.dll file to the HedgehogDevelopment.TDS NuGet package folder, alongside the HedgehogDevelopment.SitecoreProject.Tasks.dll. Just make sure your scproj has a reference to the Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.targets file AFTER the HedgehogDevelopment.TDS.targets file.
  - Activate GitDeltaDeploy
-   - by setting <CustomGitDeltaDeploy>True</CustomGitDeltaDeploy> in your config (either in scproj, scproj.user, TdsGlobal.config or TdsGlobal.config.user).
+   - by setting `<CustomGitDeltaDeploy>True</CustomGitDeltaDeploy>` in your config (either in scproj, scproj.user, TdsGlobal.config or TdsGlobal.config.user).
  - Deploy using either
    -  the project itself (right click project -> Deploy)
    -  deploy the solution (right click solution -> Deploy Solution)
