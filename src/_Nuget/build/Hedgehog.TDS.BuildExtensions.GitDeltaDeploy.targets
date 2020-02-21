@@ -74,12 +74,12 @@
 
   <Target Name="GitDeltaDeployBeforeSitecoreBuild" BeforeTargets="BeforeSitecoreBuild" Condition="'$(CustomGitDeltaDeploy)' == 'True'">
     <PropertyGroup Condition="'$(CustomGitDeltaDeploy)' == 'True'">
-      <DeltaFolder Condition="'$(OutDir)' != '$(OutputPath)' and '$(OutDir)' != ''">$(OutDir)Delta</DeltaFolder>
-      <DeltaFolder Condition="'$(OutDir)' == '$(OutputPath)' or '$(OutDir)' == ''">$(MSBuildProjectDirectory)\bin\Delta</DeltaFolder>
+      <DeltaArtifactsFolder Condition="'$(OutDir)' != '$(OutputPath)' and '$(OutDir)' != ''">$(OutDir)Reports</DeltaArtifactsFolder>
+      <DeltaArtifactsFolder Condition="'$(OutDir)' == '$(OutputPath)' or '$(OutDir)' == ''">$(MSBuildProjectDirectory)\bin\Reports</DeltaArtifactsFolder>
 
     </PropertyGroup>
     <Message Condition="'$(CustomGitDeltaDeploy)' == 'True'"
-            Importance="normal" Text="Setting the Delta Logging Directory: $(DeltaFolder)." />
+            Importance="normal" Text="Setting the Delta Logging Directory: $(DeltaArtifactsFolder)." />
 
     <GetTdsNuGetPackageFolder PackagesFolderPath="$(SolutionDir)/packages/">
       <Output TaskParameter="TdsNuGetFolder" PropertyName="TdsNuGetPackageDllFolder" />
@@ -136,8 +136,8 @@
               Importance="High" Text="Warn: Git.exe not found in PATH. We cannot determine cullable items from calls to git.exe." />
 
     <!-- If not supplied to the build already, retrieve the git commit ID of the last successful deployment of this project (from the LastDeploymentGitCommitId.txt file) and store it in the LastDeploymentGitCommitID property. -->
-    <ReadLinesFromFile Condition="$(LastDeploymentGitCommitID) == '' and Exists('$(DeltaFolder)/LastDeploymentGitCommitId.txt')"
-                       File="$(DeltaFolder)/LastDeploymentGitCommitId.txt" >
+    <ReadLinesFromFile Condition="$(LastDeploymentGitCommitID) == '' and Exists('$(DeltaArtifactsFolder)/LastDeploymentGitCommitId.txt')"
+                       File="$(DeltaArtifactsFolder)/LastDeploymentGitCommitId.txt" >
       <Output TaskParameter="Lines" PropertyName="LastDeploymentGitCommitID" />
     </ReadLinesFromFile>
     <Message Condition="'$(LastDeploymentGitCommitID)' != ''"
@@ -159,8 +159,8 @@
     <Message Condition="'$(GitCurrentCommitID)' != ''"
              Importance="normal" Text="Current Git Commit is: $(GitCurrentCommitID)" />
 
-    <MakeDir Condition="!Exists('$(DeltaFolder)')"
-         Directories="$(DeltaFolder)" />
+    <MakeDir Condition="!Exists('$(DeltaArtifactsFolder)')"
+         Directories="$(DeltaArtifactsFolder)" />
 
     <PropertyGroup>
       <PrevIdentifier Condition="'$(LastDeploymentGitTagName)' != ''">$(LastDeploymentGitTagName)</PrevIdentifier>
@@ -169,7 +169,7 @@
 
     <!-- Discover the .item files that have changed in between the current commit that this repo is at and the last deployment of this project -->
     <Exec Condition="$(GitExists) and '$(PrevIdentifier)' != '' and '$(GitCurrentCommitID)' != ''"
-          Command="git diff -r --name-only --no-commit-id $(PrevIdentifier)..$(GitCurrentCommitID) &quot;*.item&quot; &gt; &quot;$(DeltaFolder)/ChangedItemFiles.txt&quot;" Outputs="$(DeltaFolder)/ChangedItemFiles.txt" WorkingDirectory="$(SolutionDir)" />
+          Command="git diff -r --name-only --no-commit-id $(PrevIdentifier)..$(GitCurrentCommitID) &quot;*.item&quot; &gt; &quot;$(DeltaArtifactsFolder)/ChangedItemFiles.txt&quot;" Outputs="$(DeltaArtifactsFolder)/ChangedItemFiles.txt" WorkingDirectory="$(SolutionDir)" />
 
     <!-- Store the GitCurrentCommitID as the latest commit ID in the LastDeploymentGitCommitId.txt file -->
     <CallTarget Targets="OutputLastCommitIdToFile"/>
@@ -177,10 +177,10 @@
 
 
   <Target Name="OutputLastCommitIdToFile" Condition="$(GitExists) and '$(CustomGitDeltaDeploy)' == 'True'">
-    <MakeDir Condition="!Exists('$(DeltaFolder)')"
-         Directories="$(DeltaFolder)" />
+    <MakeDir Condition="!Exists('$(DeltaArtifactsFolder)')"
+         Directories="$(DeltaArtifactsFolder)" />
 
-    <Exec Command="git rev-parse HEAD &gt; &quot;$(DeltaFolder)\LastDeploymentGitCommitId.txt&quot;" Outputs="$(DeltaFolder)\LastDeploymentGitCommitId.txt" WorkingDirectory="$(SolutionDir)"  />
+    <Exec Command="git rev-parse HEAD &gt; &quot;$(DeltaArtifactsFolder)\LastDeploymentGitCommitId.txt&quot;" Outputs="$(DeltaArtifactsFolder)\LastDeploymentGitCommitId.txt" WorkingDirectory="$(SolutionDir)"  />
   </Target>
 
   
@@ -189,7 +189,7 @@
     <CallTarget Targets="GitDiff"/>
     <PropertyGroup Condition="'$(CustomGitDeltaDeploy)' == 'True'">
       <CullItemsFromProjectClass>Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.Tasks.Filters.CullItemsFromProjectByExistanceInChangedItemsFile, Hedgehog.TDS.BuildExtensions.GitDeltaDeploy</CullItemsFromProjectClass>
-      <CullItemsFromProjectParameters>$(DeltaFolder)\ChangedItemFiles.txt</CullItemsFromProjectParameters>
+      <CullItemsFromProjectParameters>$(DeltaArtifactsFolder)\ChangedItemFiles.txt</CullItemsFromProjectParameters>
     </PropertyGroup>
     <!-- Duplicate of the original Delta Deploy option, allowing for fallback to this if required. -->
     <PropertyGroup Condition="'$(CustomGitDeltaDeploy)' != 'True' and '$(IncludeItemsChangedAfter)' != ''">
@@ -201,24 +201,24 @@
   <!-- Cull down the deployable code files by checking if they exist in the DiffFiles.txt file. -->
   <Target Name="GitDeltaDeployAfterSitecoreBuild" BeforeTargets="AfterSitecoreBuild" Condition="'$(CullProjectFiles)' == 'True'" DependsOnTargets="GitDiff">
     <!-- list all files -->
-    <Message Importance="normal" Text="git ls-files --full-name &gt; &quot;$(DeltaFolder)/AllFiles.$(MSBuildProjectName).txt&quot;" />
-    <Exec Command="git ls-files --full-name &gt; &quot;$(DeltaFolder)/AllFiles.$(MSBuildProjectName).txt&quot;" Outputs="$(DeltaFolder)/AllFiles.$(MSBuildProjectName).txt" WorkingDirectory="$(SolutionDir)" />
+    <Message Importance="normal" Text="git ls-files --full-name &gt; &quot;$(DeltaArtifactsFolder)/AllFiles.$(MSBuildProjectName).txt&quot;" />
+    <Exec Command="git ls-files --full-name &gt; &quot;$(DeltaArtifactsFolder)/AllFiles.$(MSBuildProjectName).txt&quot;" Outputs="$(DeltaArtifactsFolder)/AllFiles.$(MSBuildProjectName).txt" WorkingDirectory="$(SolutionDir)" />
 
     <!-- list changed files -->
-    <Message Importance="normal" Text="git diff --name-only $(PrevIdentifier)..$(GitCurrentCommitID) &gt; &quot;$(DeltaFolder)/DiffFiles.$(MSBuildProjectName).txt&quot;" />
-    <Exec Command="git diff --name-only $(PrevIdentifier)..$(GitCurrentCommitID) &gt; &quot;$(DeltaFolder)/DiffFiles.$(MSBuildProjectName).txt&quot;" Outputs="$(DeltaFolder)/DiffFiles.$(MSBuildProjectName).txt" WorkingDirectory="$(SolutionDir)" />
+    <Message Importance="normal" Text="git diff --name-only $(PrevIdentifier)..$(GitCurrentCommitID) &gt; &quot;$(DeltaArtifactsFolder)/DiffFiles.$(MSBuildProjectName).txt&quot;" />
+    <Exec Command="git diff --name-only $(PrevIdentifier)..$(GitCurrentCommitID) &gt; &quot;$(DeltaArtifactsFolder)/DiffFiles.$(MSBuildProjectName).txt&quot;" Outputs="$(DeltaArtifactsFolder)/DiffFiles.$(MSBuildProjectName).txt" WorkingDirectory="$(SolutionDir)" />
 
     <!-- aggregate into single file listing only unchanged files -->
-    <CountLinesInFile FileName="$(DeltaFolder)/DiffFiles.$(MSBuildProjectName).txt">
+    <CountLinesInFile FileName="$(DeltaArtifactsFolder)/DiffFiles.$(MSBuildProjectName).txt">
       <Output TaskParameter="Lines" PropertyName="ChangedItemsLength" />
     </CountLinesInFile>
 
-    <Message Condition="$(ChangedItemsLength) == 0" Importance="normal" Text="No changed items found in: $(DeltaFolder)\DiffFiles.$(MSBuildProjectName).txt" />
+    <Message Condition="$(ChangedItemsLength) == 0" Importance="normal" Text="No changed items found in: $(DeltaArtifactsFolder)\DiffFiles.$(MSBuildProjectName).txt" />
 
-    <Message Condition="$(ChangedItemsLength) > 0" Importance="normal" Text="findstr /vig:&quot;$(DeltaFolder)\DiffFiles.$(MSBuildProjectName).txt&quot; &quot;$(DeltaFolder)\AllFiles.$(MSBuildProjectName).txt&quot; &gt; &quot;$(DeltaFolder)\Unchanged.$(MSBuildProjectName).txt&quot;" />
-    <Exec Condition="$(ChangedItemsLength) > 0" Command="findstr /vig:&quot;$(DeltaFolder)\DiffFiles.$(MSBuildProjectName).txt&quot; &quot;$(DeltaFolder)\AllFiles.$(MSBuildProjectName).txt&quot; &gt; &quot;$(DeltaFolder)\Unchanged.$(MSBuildProjectName).txt&quot;" Outputs="$(DeltaFolder)\Unchanged.$(MSBuildProjectName).txt" WorkingDirectory="$(SolutionDir)" />
+    <Message Condition="$(ChangedItemsLength) > 0" Importance="normal" Text="findstr /vig:&quot;$(DeltaArtifactsFolder)\DiffFiles.$(MSBuildProjectName).txt&quot; &quot;$(DeltaArtifactsFolder)\AllFiles.$(MSBuildProjectName).txt&quot; &gt; &quot;$(DeltaArtifactsFolder)\Unchanged.$(MSBuildProjectName).txt&quot;" />
+    <Exec Condition="$(ChangedItemsLength) > 0" Command="findstr /vig:&quot;$(DeltaArtifactsFolder)\DiffFiles.$(MSBuildProjectName).txt&quot; &quot;$(DeltaArtifactsFolder)\AllFiles.$(MSBuildProjectName).txt&quot; &gt; &quot;$(DeltaArtifactsFolder)\Unchanged.$(MSBuildProjectName).txt&quot;" Outputs="$(DeltaArtifactsFolder)\Unchanged.$(MSBuildProjectName).txt" WorkingDirectory="$(SolutionDir)" />
 
-    <CullFilesFromProject Condition="$(ChangedItemsLength) > 0" OutputPath="$(_OutputPath)" UnchangedFiles="$(DeltaFolder)/Unchanged.$(MSBuildProjectName).txt" />
+    <CullFilesFromProject Condition="$(ChangedItemsLength) > 0" OutputPath="$(_OutputPath)" UnchangedFiles="$(DeltaArtifactsFolder)/Unchanged.$(MSBuildProjectName).txt" />
   </Target>
 
 
