@@ -183,14 +183,6 @@
     </PropertyGroup>
   </Target>
 
-  <!-- Update the LastDeploymentGitCommitId.txt with the commit ID that the current repo is at -->
-  <Target Name="AfterSitecoreMerge" Condition="'$(CustomGitDeltaDeploy)' == 'True'">
-    <Message Importance="normal" Text="Setting the LastDeploymentGitCommitId.txt value to the latest git commit ID." />
-
-    <Exec Condition="$(GitExists)"
-          Command="git rev-parse HEAD &gt; &quot;$(DeltaFolder)/LastDeploymentGitCommitId.txt&quot;" Outputs="$(DeltaFolder)/LastDeploymentGitCommitId.txt" WorkingDirectory="$(SolutionDir)"  />
-  </Target>
-
   <Target Name="AfterSitecoreBuild" Condition="'$(CullProjectFiles)' == 'True'" DependsOnTargets="GitDiff">
     <!-- list all files -->
     <Message Importance="normal" Text="git ls-files --full-name &gt; &quot;$(DeltaFolder)/AllFiles.$(MSBuildProjectName).txt&quot;" />
