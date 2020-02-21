@@ -151,8 +151,6 @@
       <Output TaskParameter="ConsoleOutput" PropertyName="GitCurrentCommitID" />
     </Exec>
 
-    <CallTarget Condition="$(GitExists) and '$(CustomGitDeltaDeploy)' == 'True'" Targets="OutputLastCommitId"/>
-
     <Message Condition="'$(GitCurrentCommitID)' != ''"
              Importance="normal" Text="Current Git Commit is: $(GitCurrentCommitID)" />
 
@@ -167,6 +165,17 @@
     <!-- Discover the .item files that have changed in between the current commit that this repo is at and the last deployment of this project -->
     <Exec Condition="$(GitExists) and '$(PrevIdentifier)' != '' and '$(GitCurrentCommitID)' != ''"
           Command="git diff -r --name-only --no-commit-id $(PrevIdentifier)..$(GitCurrentCommitID) &quot;*.item&quot; &gt; &quot;$(DeltaFolder)/ChangedItemFiles.txt&quot;" Outputs="$(DeltaFolder)/ChangedItemFiles.txt" WorkingDirectory="$(SolutionDir)" />
+
+    <!-- Store the GitCurrentCommitID as the latest commit ID in the LastDeploymentGitCommitId.txt file -->
+    <CallTarget Condition="$(GitExists) and '$(CustomGitDeltaDeploy)' == 'True'" Targets="OutputLastCommitIdToFile"/>
+  </Target>
+
+
+  <Target Name="OutputLastCommitIdToFile" Condition="$(GitExists) and '$(CustomGitDeltaDeploy)' == 'True'">
+    <MakeDir Condition="!Exists('$(DeltaFolder)')"
+         Directories="$(DeltaFolder)" />
+
+    <Exec Command="git rev-parse HEAD &gt; &quot;$(DeltaFolder)\LastDeploymentGitCommitId.txt&quot;" Outputs="$(DeltaFolder)\LastDeploymentGitCommitId.txt" WorkingDirectory="$(SolutionDir)"  />
   </Target>
 
   <!-- Cull down the deployable items by checking if they exist in the ChangedItemFiles.txt file. -->
@@ -205,10 +214,5 @@
     <CullFilesFromProject Condition="$(ChangedItemsLength) > 0" OutputPath="$(_OutputPath)" UnchangedFiles="$(DeltaFolder)/Unchanged.$(MSBuildProjectName).txt" />
   </Target>
 
-  <Target Name="OutputLastCommitId" Condition="'$(CustomGitDeltaDeploy)' == 'True'">
-    <MakeDir Condition="!Exists('$(DeltaFolder)')"
-         Directories="$(DeltaFolder)" />
 
-    <Exec Command="git rev-parse HEAD &gt; &quot;$(DeltaFolder)\LastDeploymentGitCommitId.txt&quot;" Outputs="$(DeltaFolder)\LastDeploymentGitCommitId.txt" WorkingDirectory="$(SolutionDir)"  />
-  </Target>
 </Project>
