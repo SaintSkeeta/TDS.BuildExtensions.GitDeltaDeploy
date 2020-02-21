@@ -68,8 +68,11 @@
       </Code>
     </Task>
   </UsingTask>
+
   <UsingTask AssemblyFile="Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.dll" TaskName="Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.Tasks.Filters.CullFilesFromProject"/>
-  <Target Name="BeforeSitecoreBuild" Condition="'$(CustomGitDeltaDeploy)' == 'True'">
+
+
+  <Target Name="GitDeltaDeployBeforeSitecoreBuild" BeforeTargets="BeforeSitecoreBuild" Condition="'$(CustomGitDeltaDeploy)' == 'True'">
     <PropertyGroup Condition="'$(CustomGitDeltaDeploy)' == 'True'">
       <DeltaFolder Condition="'$(OutDir)' != '$(OutputPath)' and '$(OutDir)' != ''">$(OutDir)Delta</DeltaFolder>
       <DeltaFolder Condition="'$(OutDir)' == '$(OutputPath)' or '$(OutDir)' == ''">$(MSBuildProjectDirectory)\bin\Delta</DeltaFolder>
@@ -121,6 +124,8 @@
           DestinationFolder="$(TdsNuGetPackageDllFolder)/" />
 
   </Target>
+
+
   <Target Name="GitDiff" Condition="'$(CustomGitDeltaDeploy)' == 'True'">
     <Message Importance="" Text="Discovering changed items files since the last local deployment of this project." />
     <!-- Check that Git exists in the local PATH variable on the machine -->
@@ -178,8 +183,9 @@
     <Exec Command="git rev-parse HEAD &gt; &quot;$(DeltaFolder)\LastDeploymentGitCommitId.txt&quot;" Outputs="$(DeltaFolder)\LastDeploymentGitCommitId.txt" WorkingDirectory="$(SolutionDir)"  />
   </Target>
 
+  
   <!-- Cull down the deployable items by checking if they exist in the ChangedItemFiles.txt file. -->
-  <Target Name="GetCullItemsFromProjectParameters">
+  <Target Name="GitDeltaDeployGetCullItemsFromProjectParameters" AfterTargets="GetCullItemsFromProjectParameters">
     <CallTarget Targets="GitDiff"/>
     <PropertyGroup Condition="'$(CustomGitDeltaDeploy)' == 'True'">
       <CullItemsFromProjectClass>Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.Tasks.Filters.CullItemsFromProjectByExistanceInChangedItemsFile, Hedgehog.TDS.BuildExtensions.GitDeltaDeploy</CullItemsFromProjectClass>
@@ -192,7 +198,8 @@
     </PropertyGroup>
   </Target>
 
-  <Target Name="AfterSitecoreBuild" Condition="'$(CullProjectFiles)' == 'True'" DependsOnTargets="GitDiff">
+  <!-- Cull down the deployable code files by checking if they exist in the DiffFiles.txt file. -->
+  <Target Name="GitDeltaDeployAfterSitecoreBuild" BeforeTargets="AfterSitecoreBuild" Condition="'$(CullProjectFiles)' == 'True'" DependsOnTargets="GitDiff">
     <!-- list all files -->
     <Message Importance="normal" Text="git ls-files --full-name &gt; &quot;$(DeltaFolder)/AllFiles.$(MSBuildProjectName).txt&quot;" />
     <Exec Command="git ls-files --full-name &gt; &quot;$(DeltaFolder)/AllFiles.$(MSBuildProjectName).txt&quot;" Outputs="$(DeltaFolder)/AllFiles.$(MSBuildProjectName).txt" WorkingDirectory="$(SolutionDir)" />
