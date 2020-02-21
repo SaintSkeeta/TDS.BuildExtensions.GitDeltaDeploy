@@ -191,11 +191,6 @@
       <CullItemsFromProjectClass>Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.Tasks.Filters.CullItemsFromProjectByExistanceInChangedItemsFile, Hedgehog.TDS.BuildExtensions.GitDeltaDeploy</CullItemsFromProjectClass>
       <CullItemsFromProjectParameters>$(DeltaArtifactsFolder)\ChangedItemFiles.txt</CullItemsFromProjectParameters>
     </PropertyGroup>
-    <!-- Duplicate of the original Delta Deploy option, allowing for fallback to this if required. -->
-    <PropertyGroup Condition="'$(CustomGitDeltaDeploy)' != 'True' and '$(IncludeItemsChangedAfter)' != ''">
-      <CullItemsFromProjectClass>HedgehogDevelopment.SitecoreProject.Tasks.Filters.CullItemsFromProjectByUpdateDate, HedgehogDevelopment.SitecoreProject.Tasks</CullItemsFromProjectClass>
-      <CullItemsFromProjectParameters>$(IncludeItemsChangedAfter)</CullItemsFromProjectParameters>
-    </PropertyGroup>
   </Target>
 
   <!-- Cull down the deployable code files by checking if they exist in the DiffFiles.txt file. -->
