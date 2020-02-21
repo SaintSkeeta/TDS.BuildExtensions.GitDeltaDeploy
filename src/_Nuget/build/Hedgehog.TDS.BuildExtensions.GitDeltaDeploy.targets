@@ -167,7 +167,7 @@
           Command="git diff -r --name-only --no-commit-id $(PrevIdentifier)..$(GitCurrentCommitID) &quot;*.item&quot; &gt; &quot;$(DeltaFolder)/ChangedItemFiles.txt&quot;" Outputs="$(DeltaFolder)/ChangedItemFiles.txt" WorkingDirectory="$(SolutionDir)" />
 
     <!-- Store the GitCurrentCommitID as the latest commit ID in the LastDeploymentGitCommitId.txt file -->
-    <CallTarget Condition="$(GitExists) and '$(CustomGitDeltaDeploy)' == 'True'" Targets="OutputLastCommitIdToFile"/>
+    <CallTarget Targets="OutputLastCommitIdToFile"/>
   </Target>
 
 
