@@ -22,8 +22,8 @@ Enhancements from Geekhive's John Rappel
 ## Usage ##
  - Ensure you have git.exe in your PATH environment variable.
  - Install the NuGet package into your TDS projects.
-   - if your TDS projects DON'T use the HedgehogDevelopment.TDS NuGet package, you need to copy the packages/SaintSkeeta.TDS.BuildExtensions.GitDeltaDeploy.x.x.x/build/SaintSkeeta.TDS.BuildExtensions.GitDeltaDeploy.dll file to your Hedgehog MSBuild directory (C:\Program Files (x86)\MSBuild\HedgehogDevelopment\SitecoreProject\v9.0).
-   - if you DO use the HedgehogDevelopment.TDS NuGet package, the build will copy the SaintSkeeta.TDS.BuildExtensions.GitDeltaDeploy.dll file to the HedgehogDevelopment.TDS NuGet package folder, alongside the HedgehogDevelopment.SitecoreProject.Tasks.dll.
+   - if you wish to use GitDeltaDeploy from VisualStudio, OR if your TDS projects DON'T use the HedgehogDevelopment.TDS NuGet package, you need to copy the packages/SaintSkeeta.TDS.BuildExtensions.GitDeltaDeploy.x.x.x/build/SaintSkeeta.TDS.BuildExtensions.GitDeltaDeploy.dll file to your Hedgehog MSBuild directory (C:\Program Files (x86)\MSBuild\HedgehogDevelopment\SitecoreProject\v9.0).
+   - if you DO use the HedgehogDevelopment.TDS NuGet package on your build server, the build will copy the SaintSkeeta.TDS.BuildExtensions.GitDeltaDeploy.dll file to the HedgehogDevelopment.TDS NuGet package folder, alongside the HedgehogDevelopment.SitecoreProject.Tasks.dll so it can be used.
  - Activate GitDeltaDeploy
    - by setting `<CustomGitDeltaDeploy>True</CustomGitDeltaDeploy>` in your config (either in scproj, scproj.user, TdsGlobal.config or TdsGlobal.config.user).
  - Deploy using either

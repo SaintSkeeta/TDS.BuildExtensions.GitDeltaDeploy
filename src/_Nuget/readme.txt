@@ -12,7 +12,7 @@ Developers should instead follow the debugging steps provided [here](https://www
 
 //TODO: CHECK THE FOLLOWING!!!
 
-*  If you're using the HedgehogDevelopment.TDS NuGet packages in your solution, the build 
+ *  If you're using the HedgehogDevelopment.TDS NuGet packages in your solution, the build 
    will do an automatic copy of the SaintSkeeta.TDS.BuildExtensions.GitDeltaDeploy.dll to the HedgehogDevelopment.TDS package location for it to work.
  * If you're NOT using the HedgehogDevelopment.TDS NuGet packages, ensure you copy 
    the packages/SaintSkeeta.TDS.BuildExtensions.GitDeltaDeploy.X.X.X/build/SaintSkeeta.TDS.BuildExtensions.GitDeltaDeploy.dll to 
