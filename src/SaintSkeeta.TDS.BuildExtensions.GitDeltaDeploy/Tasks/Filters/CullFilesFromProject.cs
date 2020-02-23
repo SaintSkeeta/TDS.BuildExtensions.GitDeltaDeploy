@@ -3,7 +3,7 @@ using System.Linq;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
 
-namespace Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.Tasks.Filters
+namespace SaintSkeeta.TDS.BuildExtensions.GitDeltaDeploy.Tasks.Filters
 {
     public class CullFilesFromProject : Task
     {

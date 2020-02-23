@@ -2,18 +2,20 @@
 
 /*******************************/
 
-Hedgehog TDS.Extensions.GitDeltaDeploy
+SaintSkeeta TDS.Extensions.GitDeltaDeploy
 
 /*******************************/
 
-Thank you for downloading Hedgehog TDS.Extensions.GitDeltaDeploy, and wanting to property speed up your deployment times.
+Thank you for downloading TDS.Extensions.GitDeltaDeploy, and wanting to property speed up your deployment times.
+Please Note: This is a third party extension, so it isn’t affiliated with Hedgehog or Sitecore, and their support teams *should not* be contacted for help with this.
+Developers should instead follow the debugging steps provided [here](https://www.seanholmesby.com/debugging-gitdeltadeploy-with-a-sitecore-tds-project/), and to discuss their projects on the #tds channel in the [Sitecore Community Slack](https://sitecore.chat/).
 
 //TODO: CHECK THE FOLLOWING!!!
 
 *  If you're using the HedgehogDevelopment.TDS NuGet packages in your solution, the build 
-   will do an automatic copy of the Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.dll to next to that package for it to work.
+   will do an automatic copy of the SaintSkeeta.TDS.BuildExtensions.GitDeltaDeploy.dll to the HedgehogDevelopment.TDS package location for it to work.
  * If you're NOT using the HedgehogDevelopment.TDS NuGet packages, ensure you copy 
-   the packages/Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.X.X.X/build/Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.dll to 
+   the packages/SaintSkeeta.TDS.BuildExtensions.GitDeltaDeploy.X.X.X/build/SaintSkeeta.TDS.BuildExtensions.GitDeltaDeploy.dll to 
    your MSBuild Hedgehog directory (C:\Program Files (x86)\MSBuild\HedgehogDevelopment\SitecoreProject\v9.0).
 
 Settings:-
@@ -45,5 +47,7 @@ Source Code can be found here. https://github.com/SaintSkeeta/TDS.BuildExtension
 
 NuGet project page is here. https://www.nuget.org/packages/Hedgehog.TDS.BuildExtensions.GitDeltaDeploy
 
-Big thanks to John Rappel at Geekhive for his work on GitDeltaDeploy, and for his extensive testing of the solution.
+Debugging issues blog post can be found here: https://www.seanholmesby.com/debugging-gitdeltadeploy-with-a-sitecore-tds-project/
+
+Big thanks to John Rappel for his work on GitDeltaDeploy, and for his extensive testing of the solution.
 

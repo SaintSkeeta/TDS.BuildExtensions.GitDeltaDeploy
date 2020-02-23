@@ -18,29 +18,29 @@ platform: Any CPU
 #  - Release
 
 before_build:
-  - nuget restore Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.sln
+  - nuget restore SaintSkeeta.TDS.BuildExtensions.GitDeltaDeploy.sln
   - ps: gitversion /l console /output buildserver /updateAssemblyInfo
 
 build_script:
-  - cmd: msbuild Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.sln /p:Configuration=Debug /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll" /verbosity:normal /p:PackageVersion=%GitVersion_SemVer%
-  - cmd: msbuild Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.sln /p:Configuration=Release /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll" /verbosity:normal /p:PackageVersion=%GitVersion_SemVer%
+  - cmd: msbuild SaintSkeeta.TDS.BuildExtensions.GitDeltaDeploy.sln /p:Configuration=Debug /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll" /verbosity:normal /p:PackageVersion=%GitVersion_SemVer%
+  - cmd: msbuild SaintSkeeta.TDS.BuildExtensions.GitDeltaDeploy.sln /p:Configuration=Release /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll" /verbosity:normal /p:PackageVersion=%GitVersion_SemVer%
 
 after_build:
-- cmd: nuget pack "src\_Nuget\Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.nuspec" -version "%GitVersion_SemVer%"
+- cmd: nuget pack "src\_Nuget\SaintSkeeta.TDS.BuildExtensions.GitDeltaDeploy.nuspec" -version "%GitVersion_SemVer%"
 
 #---------------------------------#
 #      artifacts configuration    #
 #---------------------------------#
 artifacts:
 
-  - path: Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.*.nupkg
-  - path: src\Hedgehog.TDS.BuildExtensions.GitDeltaDeploy\bin\*\Hedgehog.TDS.BuildExtensions.GitDeltaDeploy*
+  - path: SaintSkeeta.TDS.BuildExtensions.GitDeltaDeploy.*.nupkg
+  - path: src\SaintSkeeta.TDS.BuildExtensions.GitDeltaDeploy\bin\*\SaintSkeeta.TDS.BuildExtensions.GitDeltaDeploy*
 
 #---------------------------------#
 #      deploy configuration    #
 #---------------------------------#
 deploy:
-  description: 'Hedgehog.TDS.Extensions.GitDeltaDeploy'
+  description: 'SaintSkeeta.TDS.Extensions.GitDeltaDeploy'
   provider: GitHub
   auth_token:
     secure: vMfLJBfd7tN7ijjHaiJ1DSbqJzKP7M0i0zJ4k2SSFPj/t+vl9Kp+jFPt/wExjXOa # your encrypted token from GitHub

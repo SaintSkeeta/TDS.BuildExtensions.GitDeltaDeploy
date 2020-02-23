@@ -4,7 +4,7 @@ using HedgehogDevelopment.SitecoreProject.Tasks.Extensibility;
 using System.IO;
 using System.Linq;
 
-namespace Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.Tasks.Filters
+namespace SaintSkeeta.TDS.BuildExtensions.GitDeltaDeploy.Tasks.Filters
 {
     public class CullItemsFromProjectByExistanceInChangedItemsFile : ICanIncludeItem
     {

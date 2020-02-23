@@ -1,25 +1,24 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
     <metadata>
-      <id>Hedgehog.TDS.BuildExtensions.GitDeltaDeploy</id>
+      <id>SaintSkeeta.TDS.BuildExtensions.GitDeltaDeploy</id>
       <version>$version$</version>
-      <title>Hedgehog.TDS.BuildExtensions.GitDeltaDeploy</title>
-      <authors>Sean Holmesby (Hedgehog), John Rappel (GeekHive)</authors>
-      <owners>Hedgehog</owners>
+      <title>SaintSkeeta.TDS.BuildExtensions.GitDeltaDeploy</title>
+      <authors>Sean Holmesby (Sitecore), John Rappel (EPAM)</authors>
+      <owners>Sean Holmesby</owners>
       <projectUrl>https://github.com/SaintSkeeta/TDS.BuildExtensions.GitDeltaDeploy</projectUrl>
       <licenseUrl>https://github.com/SaintSkeeta/TDS.BuildExtensions.GitDeltaDeploy/blob/master/LICENSE</licenseUrl>
       <iconUrl>https://www.teamdevelopmentforsitecore.com/-/media/publicimages/team%20development%20for%20sitecore/100x100/tds-classic-icon-100x100.jpg</iconUrl>
       <requireLicenseAcceptance>false</requireLicenseAcceptance>
-      <description>Adds Team Development for Sitecore (TDS) Classic custom targets file to the TDS project, for using a custom delta deployment using Git.</description>
-      <summary>Custom git delta deploy build extension for Team Development for Sitecore (TDS) Classic by Hedgehog.</summary>
-      <releaseNotes>Fix for project paths with spaces. Fix for no files changes in Delta File Deployment.</releaseNotes>
-      <copyright>Copyright © Hedgehog 2015, 2016, 2017</copyright>
-      <tags>TDS Sitecore BuildExtensions Git Delta Deploy</tags>
+      <description>Adds Sitecore TDS custom targets file to the TDS project, for using a custom delta deployment using Git.</description>
+      <summary>Custom git delta deploy build extension for Sitecore TDS.</summary>
+      <releaseNotes>Major Update - made package work with YML serialization format. Fixed issue where order or TDS NuGet packages were dependent on each other (HedgehogDevelopment.TDS and GitDeltaDeploy). Renamed project and package to 'SaintSkeeta' instead of 'Hedgehog'.</releaseNotes>
+      <tags>Sitecore TDS BuildExtensions Git Delta Deploy</tags>
     </metadata>
     <files>
-      <file src="build\Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.targets" target="build\Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.targets" />
-      <file src="..\Hedgehog.TDS.BuildExtensions.GitDeltaDeploy\bin\Release\Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.dll" target="build\Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.dll" />
-      <file src="..\Hedgehog.TDS.BuildExtensions.GitDeltaDeploy\bin\Debug\Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.dll" target="build\Hedgehog.TDS.BuildExtensions.GitDeltaDeploy_Debug.dll" />
+      <file src="build\SaintSkeeta.TDS.BuildExtensions.GitDeltaDeploy.targets" target="build\SaintSkeeta.TDS.BuildExtensions.GitDeltaDeploy.targets" />
+      <file src="..\SaintSkeeta.TDS.BuildExtensions.GitDeltaDeploy\bin\Release\SaintSkeeta.TDS.BuildExtensions.GitDeltaDeploy.dll" target="build\SaintSkeeta.TDS.BuildExtensions.GitDeltaDeploy.dll" />
+      <file src="..\SaintSkeeta.TDS.BuildExtensions.GitDeltaDeploy\bin\Debug\SaintSkeeta.TDS.BuildExtensions.GitDeltaDeploy.dll" target="build\SaintSkeeta.TDS.BuildExtensions.GitDeltaDeploy_Debug.dll" />
       <file src="readme.txt" target="readme.txt" />
     </files>
 </package>

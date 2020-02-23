@@ -7,8 +7,8 @@
     <ProjectGuid>{43E0930D-01EA-46E0-B302-D0B91581C8EF}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Hedgehog.TDS.BuildExtensions.GitDeltaDeploy</RootNamespace>
-    <AssemblyName>Hedgehog.TDS.BuildExtensions.GitDeltaDeploy</AssemblyName>
+    <RootNamespace>SaintSkeeta.TDS.BuildExtensions.GitDeltaDeploy</RootNamespace>
+    <AssemblyName>SaintSkeeta.TDS.BuildExtensions.GitDeltaDeploy</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
