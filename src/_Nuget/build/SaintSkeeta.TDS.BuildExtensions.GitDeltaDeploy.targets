@@ -74,8 +74,8 @@
 
 
   <Target Name="GitDeltaDeployBeforeSitecoreBuild" BeforeTargets="BeforeSitecoreBuild" Condition="'$(CustomGitDeltaDeploy)' == 'True'">
-      <DeltaArtifactsFolder Condition="'$(OutDir)' != '$(OutputPath)' and '$(OutDir)' != ''">$(OutDir)Report</DeltaArtifactsFolder>
-    <PropertyGroup>
+    <PropertyGroup Condition="$(DeltaArtifactsFolder) ==''" >
+      <DeltaArtifactsFolder Condition="'$(OutDir)' != '$(OutputPath)' and '$(OutDir)' != ''">$(OutDir)Delta</DeltaArtifactsFolder>
       <DeltaArtifactsFolder Condition="'$(OutDir)' == '$(OutputPath)' or '$(OutDir)' == ''">$(MSBuildProjectDirectory)\bin\Delta</DeltaArtifactsFolder>
     </PropertyGroup>
 
