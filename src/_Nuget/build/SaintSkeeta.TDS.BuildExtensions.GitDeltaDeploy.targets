@@ -83,7 +83,7 @@
 
     <PropertyGroup>
       <SerializationFormatExtension Condition="'$(SerializationFormat)' == 'YML'">.yml</SerializationFormatExtension> 
-      <SerializationFormatExtension Condition="'$(SerializationFormat)' == '' or '$(SerializationFormat)' == 'ITEM'">.item</SerializationFormatExtension> 
+      <SerializationFormatExtension Condition="'$(SerializationFormat)' == '' or '$(SerializationFormat)' == 'Item'">.item</SerializationFormatExtension> 
     </PropertyGroup>
 
     <Message Importance="high" Text="Using the Serialization File Format: $(SerializationFormatExtension)." />
