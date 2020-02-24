@@ -42,6 +42,8 @@ artifacts:
 deploy:
   description: 'SaintSkeeta.TDS.Extensions.GitDeltaDeploy'
   provider: GitHub
+  auth_token:
+    secure: 2ld9+AXDmrPWQ0AW+t7z6AVNrMRNYmt6HdDkdHyIUrUzM8RrXALRWCp0K7XdwPvn
   artifact: /.*\.nupkg/
   draft: false
   prerelease: false
