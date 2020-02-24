@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+    <metadata>
+      <id>Hedgehog.TDS.BuildExtensions.GitDeltaDeploy</id>
+      <version>2.3.0</version>
+      <title>Hedgehog.TDS.BuildExtensions.GitDeltaDeploy</title>
+      <authors>Sean Holmesby (Sitecore), John Rappel (EPAM)</authors>
+      <owners>Sean Holmesby</owners>
+      <projectUrl>https://github.com/SaintSkeeta/TDS.BuildExtensions.GitDeltaDeploy</projectUrl>
+      <licenseUrl>https://github.com/SaintSkeeta/TDS.BuildExtensions.GitDeltaDeploy/blob/master/LICENSE</licenseUrl>
+      <iconUrl>https://www.teamdevelopmentforsitecore.com/-/media/publicimages/team%20development%20for%20sitecore/100x100/tds-classic-icon-100x100.jpg</iconUrl>
+      <requireLicenseAcceptance>false</requireLicenseAcceptance>
+      <description>Obsolete - package moved to SaintSkeeta.TDS.BuildExtensions.GitDeltaDeploy. Use that instead going forward.</description>
+      <summary>Obsolete - package moved to SaintSkeeta.TDS.BuildExtensions.GitDeltaDeploy. Use that instead going forward.</summary>
+      <releaseNotes>Obsolete - package moved to SaintSkeeta.TDS.BuildExtensions.GitDeltaDeploy. Use that instead going forward.</releaseNotes>
+      <tags>TDS Sitecore BuildExtensions Git Delta Deploy</tags>
+      <dependencies>
+        <dependency id="SaintSkeeta.TDS.BuildExtensions.GitDeltaDeploy" version="3.0.0"/>
+      </dependencies>
+    </metadata>
+    <files>
+      <file src="readme.txt" target="readme.txt" />
+    </files>
+</package>
