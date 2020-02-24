@@ -72,23 +72,21 @@
   <UsingTask AssemblyFile="SaintSkeeta.TDS.BuildExtensions.GitDeltaDeploy.dll" TaskName="SaintSkeeta.TDS.BuildExtensions.GitDeltaDeploy.Tasks.Filters.CullFilesFromProject"/>
 
 
-  
+
   <Target Name="GitDeltaDeployBeforeSitecoreBuild" BeforeTargets="BeforeSitecoreBuild" Condition="'$(CustomGitDeltaDeploy)' == 'True'">
-    <PropertyGroup Condition="'$(CustomGitDeltaDeploy)' == 'True'">
       <DeltaArtifactsFolder Condition="'$(OutDir)' != '$(OutputPath)' and '$(OutDir)' != ''">$(OutDir)Report</DeltaArtifactsFolder>
+    <PropertyGroup>
       <DeltaArtifactsFolder Condition="'$(OutDir)' == '$(OutputPath)' or '$(OutDir)' == ''">$(MSBuildProjectDirectory)\bin\Delta</DeltaArtifactsFolder>
     </PropertyGroup>
 
-    <Message Condition="'$(CustomGitDeltaDeploy)' == 'True'"
-            Importance="normal" Text="Setting the Delta Logging Directory: $(DeltaArtifactsFolder)." />
+    <Message Importance="high" Text="Setting the Delta Logging Directory: $(DeltaArtifactsFolder)." />
 
-    <PropertyGroup Condition="'$(CustomGitDeltaDeploy)' == 'True'">
+    <PropertyGroup>
       <SerializationFormatExtension Condition="'$(SerializationFormat)' == 'YML'">.yml</SerializationFormatExtension> 
       <SerializationFormatExtension Condition="'$(SerializationFormat)' == '' or '$(SerializationFormat)' == 'ITEM'">.item</SerializationFormatExtension> 
     </PropertyGroup>
 
-    <Message Condition="'$(CustomGitDeltaDeploy)' == 'True'"
-            Importance="normal" Text="Using the Serialization File Format: $(SerializationFormatExtension)." />
+    <Message Importance="high" Text="Using the Serialization File Format: $(SerializationFormatExtension)." />
 
     <GetTdsNuGetPackageFolder PackagesFolderPath="$(SolutionDir)/packages/">
       <Output TaskParameter="TdsNuGetFolder" PropertyName="TdsNuGetPackageDllFolder" />
@@ -136,7 +134,7 @@
 
 
   <Target Name="GitDiff" Condition="'$(CustomGitDeltaDeploy)' == 'True'">
-    <Message Importance="" Text="Discovering changed items files since the last local deployment of this project." />
+    <Message Importance="High" Text="GitDeltaDeploy: Discovering changed items files since the last local deployment of this project." />
     <!-- Check that Git exists in the local PATH variable on the machine -->
     <ExistsInPath FileName="git.exe">
       <Output TaskParameter="Exists" PropertyName="GitExists" />
