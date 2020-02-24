@@ -41,6 +41,7 @@ artifacts:
 #---------------------------------#
 deploy:
   description: 'SaintSkeeta.TDS.Extensions.GitDeltaDeploy'
+  provider: GitHub
   artifact: /.*\.nupkg/
   draft: false
   prerelease: false
