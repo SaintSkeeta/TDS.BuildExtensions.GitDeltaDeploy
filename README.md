@@ -4,10 +4,10 @@ Note: This is a third party extension, so it isn’t affiliated with Hedgehog or
 Instead I encourage developers to follow the debugging steps provided below, and to discuss their projects on the #tds channel in the [Sitecore Community Slack](https://sitecore.chat/).
 
 [![Build status](https://ci.appveyor.com/api/projects/status/biqveu6ugx859i2f?svg=true)](https://ci.appveyor.com/project/SeanHolmesby/tds-buildextensions-gitdeltadeploy/branch/master)
-[![NuGet](https://img.shields.io/nuget/v/Hedgehog.TDS.BuildExtensions.GitDeltaDeploy.svg?maxAge=2592000)](https://www.nuget.org/packages/Hedgehog.TDS.BuildExtensions.GitDeltaDeploy)
+[![NuGet](https://img.shields.io/nuget/v/SaintSkeeta.TDS.BuildExtensions.GitDeltaDeploy.svg?maxAge=2592000)](https://www.nuget.org/packages/Hedgehog.TDS.BuildExtensions.GitDeltaDeploy)
 [![Licence](https://img.shields.io/github/license/mashape/apistatus.svg?maxAge=2592000)](https://github.com/SaintSkeeta/TDS.BuildExtensions.GitDeltaDeploy/blob/master/LICENSE)
 
-NuGet package available: [Hedgehog.TDS.BuildExtensions.GitDeltaDeploy](https://www.nuget.org/packages/Hedgehog.TDS.BuildExtensions.GitDeltaDeploy)
+NuGet package available: [SaintSkeeta.TDS.BuildExtensions.GitDeltaDeploy](https://www.nuget.org/packages/Hedgehog.TDS.BuildExtensions.GitDeltaDeploy)
 
 Detailed Blog Post
  - [http://www.seanholmesby.com/true-delta-deploys-with-tds-classic/](http://www.seanholmesby.com/true-delta-deploys-with-tds-classic/)
