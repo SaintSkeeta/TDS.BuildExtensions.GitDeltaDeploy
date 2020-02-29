@@ -12,11 +12,11 @@ Developers should instead follow the debugging steps provided [here](https://www
 
 //TODO: CHECK THE FOLLOWING!!!
 
- *  If you're using the HedgehogDevelopment.TDS NuGet packages in your solution, the build 
-   will do an automatic copy of the SaintSkeeta.TDS.BuildExtensions.GitDeltaDeploy.dll to the HedgehogDevelopment.TDS package location for it to work.
- * If you're NOT using the HedgehogDevelopment.TDS NuGet packages, ensure you copy 
+ * If you're building with GitDeltaDeploy turned on, on a machine with Sitecore TDS installed (developer machine or OnPrem build server) ensure you copy 
    the packages/SaintSkeeta.TDS.BuildExtensions.GitDeltaDeploy.X.X.X/build/SaintSkeeta.TDS.BuildExtensions.GitDeltaDeploy.dll to 
    your MSBuild Hedgehog directory (C:\Program Files (x86)\MSBuild\HedgehogDevelopment\SitecoreProject\v9.0).
+ * Read through the considerations for your build/deployment to ensure your setup is configured well. https://www.seanholmesby.com/gitdeltadeploy-installation-and-usage-considerations/
+ 
 
 Settings:-
 Add this setting to your TdsGlobal.config and/or TdsGlobal.config.user file for the appropriate Configurations, to enable and manage the GitDeltaDeploy.
@@ -45,7 +45,7 @@ For more information on how this project works, please refer to the blog post he
 
 Source Code can be found here. https://github.com/SaintSkeeta/TDS.BuildExtensions.GitDeltaDeploy
 
-NuGet project page is here. https://www.nuget.org/packages/Hedgehog.TDS.BuildExtensions.GitDeltaDeploy
+NuGet project page is here. https://www.nuget.org/packages/SaintSkeeta.TDS.BuildExtensions.GitDeltaDeploy
 
 Debugging issues blog post can be found here: https://www.seanholmesby.com/debugging-gitdeltadeploy-with-a-sitecore-tds-project/
 

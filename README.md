@@ -9,15 +9,24 @@ Instead I encourage developers to follow the debugging steps provided below, and
 
 NuGet package available: [SaintSkeeta.TDS.BuildExtensions.GitDeltaDeploy](https://www.nuget.org/packages/SaintSkeeta.TDS.BuildExtensions.GitDeltaDeploy)
 
-Detailed Blog Post
+Overview Blog Post
  - [http://www.seanholmesby.com/true-delta-deploys-with-tds-classic/](http://www.seanholmesby.com/true-delta-deploys-with-tds-classic/)
 
 Debugging GitDeltaDeploy
- - [https://www.seanholmesby.com/debugging-gitdeltadeploy-with-a-sitecore-tds-project/](https://www.seanholmesby.com/debugging-gitdeltadeploy-with-a-sitecore-tds-project/)
+ - [Debugging GitDeltaDeploy Tips and Tricks](https://www.seanholmesby.com/debugging-gitdeltadeploy-with-a-sitecore-tds-project/)
 
-Enhancements from Geekhive's John Rappel
- - [https://www.geekhive.com/buzz/post/2017/09/enhancements-sitecore-true-delta-deploy-tds-git/](https://www.geekhive.com/buzz/post/2017/09/enhancements-sitecore-true-delta-deploy-tds-git/)
- - [https://sitecorerap.wordpress.com/2017/09/15/fully-automating-git-delta-deploys-in-sitecore/](https://sitecorerap.wordpress.com/2017/09/15/fully-automating-git-delta-deploys-in-sitecore/)
+Considerations for Builds/Deployments
+ - [Fully Automating GitDeltaDeploys](https://sitecorerap.wordpress.com/2017/09/15/fully-automating-git-delta-deploys-in-sitecore/)
+ - [Installation and Considerations](https://www.seanholmesby.com/gitdeltadeploy-installation-and-usage-considerations/)
+ 
+
+GitDeltaDeploy Features
+ - [Version 3 Released](https://www.seanholmesby.com/gitdeltadeploy-version-3-released/)
+ - [Support for YAML Serialization](https://www.seanholmesby.com/gitdeltadeploy-version-3-support-for-yaml-serialization)
+ - [Project, Package and DLL Rename](https://www.seanholmesby.com/gitdeltadeploy-version-3-package-project-dll-rename/)
+ - [Configurable DeltaArtifactsFolder](https://www.seanholmesby.com/gitdeltadeploy-version-3-configurable-deltaartifactsfolder/)
+ 
+
 
 ## Usage ##
  - Ensure you have git.exe in your PATH environment variable.
